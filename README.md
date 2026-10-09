@@ -1,5 +1,7 @@
 # skillbench
 
+[![CI](https://github.com/Enoch-Nemili/skillbench/actions/workflows/ci.yml/badge.svg)](https://github.com/Enoch-Nemili/skillbench/actions/workflows/ci.yml)
+
 **Agent Skills that come with evidence.**
 
 A small pack of [Agent Skills](https://agentskills.io) for AI-infrastructure work, plus the
