@@ -12,13 +12,14 @@ Each skill is distilled from a project that was built and measured first. `retri
 example, is the method used to tune [PaperMind](https://github.com/Enoch-Nemili/papermind)'s
 hybrid search.
 
-> **Status:** v0.1: linter and first skill. Evals are being built next; see the roadmap.
+> **Status:** v0.1: linter and first skills. Evals are being built next; see the roadmap.
 
 ## Skills
 
 | Skill | What it does | Comes from |
 |---|---|---|
 | [`retrieval-eval`](skills/retrieval-eval/SKILL.md) | Scores a RAG/search system with hit@1, recall@k and MRR and picks between configurations using a decision rule fixed before the run. Bundles a stdlib scoring/compare script. | PaperMind hybrid search |
+| [`mcp-server-hardening`](skills/mcp-server-hardening/SKILL.md) | Reviews an MCP server against a 34-point checklist tied to the MCP spec (bind address, auth, Origin/DNS rebinding, token passthrough, path and URL limits, secrets, container) and probes the running server to prove it. | PaperMind's HTTP mode and auth |
 
 A skill is a folder with a `SKILL.md` (YAML frontmatter + instructions) and optional
 `scripts/`, `references/` and `assets/`. Agents read only each skill's name and description at
@@ -73,10 +74,12 @@ both on the same 18 cases and checks they agree.
 
 - [x] Linter for the SKILL.md spec, with reference-validator conformance tests
 - [x] Skill 1: `retrieval-eval`
-- [ ] Skills 2–4: MCP server hardening, reproduce-before-fix debugging, release polish
+- [x] Skill 2: `mcp-server-hardening`
+- [ ] Skills 3–4: reproduce-before-fix debugging, release polish
 - [ ] Trigger evals: should-trigger / shouldn't-trigger prompts per skill → precision and recall
 - [ ] Outcome evals: the same tasks with and without the skill, scored by deterministic checks
-- [ ] Results table in this README, CI on every pull request, v1.0.0
+- [x] CI: tests, ruff and `skillbench lint --strict` on every push and pull request
+- [ ] Results table in this README, v1.0.0
 
 ## Development
 
