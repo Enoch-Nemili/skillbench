@@ -1,0 +1,38 @@
+{"id": "hard-multi-01", "prompt": "Harden our MCP server before we tag v1.0 and publish release notes.", "expected": ["mcp-server-hardening", "release-polish"], "kind": "multi"}
+{"id": "hard-multi-02", "prompt": "CI started failing right before the release. Find out why, then cut v2.1.0.", "expected": ["repro-before-fix", "release-polish"], "kind": "multi"}
+{"id": "hard-multi-03", "prompt": "After the reranker change our eval script crashes with IndexError on half the queries. Fix the crash, then tell me whether the reranker actually helped.", "expected": ["repro-before-fix", "retrieval-eval"], "kind": "multi"}
+{"id": "hard-multi-04", "prompt": "Security-review the search tool our MCP server exposes, and measure whether its new hybrid ranking beats plain vector search.", "expected": ["mcp-server-hardening", "retrieval-eval"], "kind": "multi"}
+{"id": "hard-multi-05", "prompt": "Clean up this repo so we can open-source it, and make sure the MCP server inside it isn't exposing anything it shouldn't.", "expected": ["release-polish", "mcp-server-hardening"], "kind": "multi"}
+{"id": "hard-confusable-01", "prompt": "Recall@5 dropped from 0.94 to 0.61 overnight and nobody touched the retrieval config. Find what broke.", "expected": ["repro-before-fix"], "kind": "confusable", "allowed": ["retrieval-eval"]}
+{"id": "hard-confusable-02", "prompt": "Our MCP server crashes with a KeyError whenever a tool gets an empty argument.", "expected": ["repro-before-fix"], "kind": "confusable", "allowed": ["mcp-server-hardening"]}
+{"id": "hard-confusable-03", "prompt": "We're about to release, but I'm not sure our search is as good as the README claims. Can you check the numbers before we publish them?", "expected": ["retrieval-eval"], "kind": "confusable", "allowed": ["release-polish"]}
+{"id": "hard-confusable-04", "prompt": "The MCP server works on my machine but refuses connections inside Docker.", "expected": ["repro-before-fix"], "kind": "confusable", "allowed": ["mcp-server-hardening"]}
+{"id": "hard-confusable-05", "prompt": "Add a CHANGELOG entry for the bug fix I just merged.", "expected": ["release-polish"], "kind": "confusable"}
+{"id": "hard-confusable-06", "prompt": "Does our MCP server leak the database password in its error messages? Check before we ship it.", "expected": ["mcp-server-hardening"], "kind": "confusable"}
+{"id": "hard-neighbour-01", "prompt": "Build a new MCP server that wraps our Jira API.", "expected": [], "kind": "neighbour"}
+{"id": "hard-neighbour-02", "prompt": "Add a list_tickets tool to my MCP server.", "expected": [], "kind": "neighbour"}
+{"id": "hard-neighbour-03", "prompt": "Make a line chart of recall@k for k from 1 to 10 using this CSV.", "expected": [], "kind": "neighbour"}
+{"id": "hard-neighbour-04", "prompt": "Write the announcement email for our v2 launch.", "expected": [], "kind": "neighbour"}
+{"id": "hard-neighbour-05", "prompt": "Resolve the merge conflict in pyproject.toml.", "expected": [], "kind": "neighbour"}
+{"id": "hard-neighbour-06", "prompt": "Click through the signup flow in a browser and screenshot every step.", "expected": [], "kind": "neighbour"}
+{"id": "hard-neighbour-07", "prompt": "Summarize this bug report PDF in five bullet points.", "expected": [], "kind": "neighbour"}
+{"id": "hard-concept-01", "prompt": "Explain how reciprocal rank fusion works.", "expected": [], "kind": "concept"}
+{"id": "hard-concept-02", "prompt": "What's the difference between hit@1 and recall@5?", "expected": [], "kind": "concept"}
+{"id": "hard-concept-03", "prompt": "What is DNS rebinding?", "expected": [], "kind": "concept"}
+{"id": "hard-concept-04", "prompt": "What does semantic versioning mean by a major version?", "expected": [], "kind": "concept"}
+{"id": "hard-concept-05", "prompt": "Write a Python function that computes MRR from a list of ranks.", "expected": [], "kind": "concept"}
+{"id": "hard-concept-06", "prompt": "Explain what git bisect does.", "expected": [], "kind": "concept"}
+{"id": "hard-terse-01", "prompt": "flaky again. test_upload, about 1 in 10 runs", "expected": ["repro-before-fix"], "kind": "terse"}
+{"id": "hard-terse-02", "prompt": "safe to expose? it's the FastMCP server from earlier", "expected": ["mcp-server-hardening"], "kind": "terse"}
+{"id": "hard-terse-03", "prompt": "v1 time. make the repo look legit", "expected": ["release-polish"], "kind": "terse"}
+{"id": "hard-terse-04", "prompt": "top-1 accuracy of our doc search: how do I even measure that", "expected": ["retrieval-eval"], "kind": "terse"}
+{"id": "hard-terse-05", "prompt": "500s since this morning, logs attached", "expected": ["repro-before-fix"], "kind": "terse"}
+{"id": "hard-terse-06", "prompt": "numbers please: is the new chunker better or not", "expected": ["retrieval-eval"], "kind": "terse"}
+{"id": "hard-non-english-01", "prompt": "Mi servidor MCP acepta conexiones desde cualquier IP. ¿Cómo lo aseguro?", "expected": ["mcp-server-hardening"], "kind": "non-english"}
+{"id": "hard-non-english-02", "prompt": "हमारा एक टेस्ट कभी पास होता है, कभी फेल। इसकी असली वजह कैसे पता करें?", "expected": ["repro-before-fix"], "kind": "non-english"}
+{"id": "hard-non-english-03", "prompt": "Quiero publicar mi proyecto en GitHub como código abierto. ¿Qué me falta?", "expected": ["release-polish"], "kind": "non-english"}
+{"id": "hard-non-english-04", "prompt": "Comment savoir si mon moteur de recherche RAG trouve les bons documents ?", "expected": ["retrieval-eval"], "kind": "non-english"}
+{"id": "hard-long-01", "prompt": "Some background: we run an internal assistant for the HR team. It talks to an MCP server we wrote that exposes tools for reading employee handbooks, filing leave requests and looking up payroll dates. Legal has asked what a malicious prompt hidden in a handbook could make it do, and whether anyone else on the network can reach it. Where do we start?", "expected": ["mcp-server-hardening"], "kind": "long"}
+{"id": "hard-long-02", "prompt": "Context: we have a PDF question-answering bot for our support team. Last sprint we switched from 1,000-token chunks to 300-token chunks. Product says answers got worse, data science says nothing changed, and nobody has numbers. I need to settle this with evidence by Friday.", "expected": ["retrieval-eval"], "kind": "long"}
+{"id": "hard-long-03", "prompt": "Every few days our nightly import job dies with 'connection reset by peer' around 3am, and by the time anyone looks it works again. It's been going on for a month. We've added retries twice and it still happens. I want to actually understand it this time.", "expected": ["repro-before-fix"], "kind": "long"}
+{"id": "hard-long-04", "prompt": "We built a small CLI for converting lab instrument files to CSV. Three other labs want to use it next month. Right now it's a folder on my laptop with a script, some test data and a notes.txt. What needs to happen before we hand it over?", "expected": ["release-polish"], "kind": "long"}

@@ -117,22 +117,28 @@ def _triggers(args: argparse.Namespace) -> int:
         return 2
 
     def progress(i, total, case, answer):
-        mark = "ok " if set(answer.chosen) & set(ours) == set(case.expected) else "MISS"
+        got = set(answer.chosen) & set(ours)
+        ok = set(case.expected) <= got <= set(case.expected) | set(case.allowed)
+        mark = "ok " if ok else "MISS"
         print(
             f"[{i}/{total}] {mark} {case.id}: {', '.join(answer.chosen) or 'none'}", file=sys.stderr
         )
 
-    path = triggers.run_path(args.out, provider, catalog)
+    case_set = Path(args.cases).stem
+    path = triggers.run_path(args.out, provider, catalog, case_set)
     incomplete = None
     try:
-        path, answers = triggers.run(cases, catalog, provider, args.trials, args.out, progress)
+        path, answers = triggers.run(
+            cases, catalog, provider, args.trials, args.out, progress, case_set
+        )
     except ProviderError as exc:
         incomplete = str(exc)
         answers = triggers.load_answers(path)
 
     report = triggers.score(cases, [a for a in answers if a.trial < args.trials], ours)
     title = (
-        f"{provider.name} · {provider.model} · {args.trials} trial(s) · catalog {path.stem[-8:]}"
+        f"{provider.name} · {provider.model} · {case_set} · {args.trials} trial(s) · "
+        f"catalog {path.stem[-8:]}"
     )
     markdown = triggers.to_markdown(report, title)
     if answers:
