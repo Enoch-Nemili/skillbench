@@ -45,6 +45,7 @@ SECRET_PATTERNS = {
     "AWS access key": re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
     "GitHub token": re.compile(r"\bgh[pousr]_[A-Za-z0-9]{36,}\b"),
     "Google API key": re.compile(r"\bAIza[0-9A-Za-z_-]{35}\b"),
+    "Google auth key": re.compile(r"\bAQ\.[0-9A-Za-z_-]{40,}"),
     "Slack token": re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b"),
     "OpenAI/Anthropic-style key": re.compile(r"\bsk-(?:ant-)?[A-Za-z0-9_-]{32,}\b"),
 }
