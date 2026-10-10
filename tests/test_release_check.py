@@ -124,6 +124,13 @@ def test_token_patterns_fail(repo):
     assert "GitHub token" in checks["secrets-in-files"].detail
 
 
+def test_new_google_key_format_fails(repo):
+    fake = "AQ." + "Ab8" + "x" * 45  # built at runtime so this file holds no key
+    commit(repo, "settings.py", f'GEMINI = "{fake}"\n')
+    checks = {c.name: c for c in rc.run_checks(repo)}
+    assert "Google auth key" in checks["secrets-in-files"].detail
+
+
 def test_database_url_with_real_password_warns(repo):
     commit(repo, "settings.py", 'URL = "postgresql://app:Xk92hd!s@db.example.com/prod"\n')
     assert statuses(repo)["database-urls"] == "WARN"

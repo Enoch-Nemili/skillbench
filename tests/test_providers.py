@@ -175,3 +175,35 @@ def test_rate_limit_spaces_calls(monkeypatch):
     provider.complete("s", "1")
     provider.complete("s", "2")
     assert sleeps and 0.9 < sleeps[0] <= 1.0
+
+
+def slow_then(reply_after, delay=0.5):
+    """A route that stalls past the client timeout for the first `reply_after` calls."""
+    calls = {"n": 0}
+
+    def route(body, headers):
+        calls["n"] += 1
+        if calls["n"] <= reply_after:
+            # Event.wait, not time.sleep: the gemini_env fixture stubs out time.sleep.
+            threading.Event().wait(delay)
+        return reply('{"skills": []}')
+
+    return route, calls
+
+
+def test_gemini_retries_a_read_timeout(monkeypatch, gemini_env):
+    """Regression: a slow reply raised a bare TimeoutError and crashed the whole run."""
+    route, calls = slow_then(reply_after=1)
+    with fake_server({("POST", "/models/"): route}) as (url, _):
+        monkeypatch.setattr(providers, "GEMINI_URL", url)
+        provider = GeminiProvider("m1", rpm=None, timeout=0.2)
+        assert provider.complete("s", "u") == '{"skills": []}'
+    assert calls["n"] == 2
+
+
+def test_gemini_gives_up_cleanly_when_the_network_keeps_failing(monkeypatch, gemini_env):
+    route, _ = slow_then(reply_after=99)
+    with fake_server({("POST", "/models/"): route}) as (url, _):
+        monkeypatch.setattr(providers, "GEMINI_URL", url)
+        with pytest.raises(ProviderError, match="network"):
+            GeminiProvider("m1", rpm=None, timeout=0.2).complete("s", "u")

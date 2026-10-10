@@ -97,7 +97,7 @@ class GeminiProvider(Provider):
     MAX_WAIT = 90.0  # longer than this usually means the daily quota is spent
 
     def __init__(
-        self, model: str, temperature: float = 0.0, rpm: float | None = 5, timeout: float = 60.0
+        self, model: str, temperature: float = 0.0, rpm: float | None = 5, timeout: float = 120.0
     ):
         super().__init__(model, temperature, rpm)
         load_dotenv()
@@ -140,6 +140,14 @@ class GeminiProvider(Provider):
                         f"model {self.model!r} not found; run `skillbench models --provider gemini`"
                     ) from err
                 raise ProviderError(f"Gemini API error {err.code}: {text[:300]}") from err
+            except OSError as err:  # timeouts, dropped connections, DNS hiccups
+                if attempt < self.MAX_RETRIES:
+                    time.sleep(2 ** (attempt + 2))
+                    continue
+                raise ProviderError(
+                    f"network error after {self.MAX_RETRIES + 1} attempts ({err}); rerun later "
+                    "and the eval resumes where it stopped"
+                ) from err
         parts = data.get("candidates", [{}])[0].get("content", {}).get("parts", [])
         return "".join(p.get("text", "") for p in parts if not p.get("thought"))
 
