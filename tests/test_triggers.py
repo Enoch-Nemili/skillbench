@@ -214,3 +214,42 @@ def test_cli_min_accuracy_gate(tmp_path):
 def test_cli_requires_a_model_for_real_providers(tmp_path, capsys):
     assert main(["triggers", str(REPO / "skills"), "--provider", "ollama"]) == 2
     assert "--model is required" in capsys.readouterr().err
+
+
+def test_allowed_skills_are_not_penalised():
+    cases = [
+        Case("r1", "recall dropped overnight", ["beta"], "confusable", ["alpha"]),
+        Case("n1", "explain a concept", [], "near-miss", ["alpha"]),
+    ]
+    answers = [
+        Answer("r1", 0, ["beta", "alpha"], ""),  # expected + allowed: correct
+        Answer("r1", 1, ["alpha"], ""),  # allowed alone misses the expected skill
+        Answer("n1", 0, ["alpha"], ""),  # allowed on a negative: not a false trigger
+    ]
+    report = triggers.score(cases, answers, OURS)
+    assert [m["trial"] for m in report.mistakes] == [1]
+    assert report.per_skill["alpha"]["fp"] == 0
+    assert report.per_skill["beta"] == {
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.667,
+    }
+    assert report.summary["false_trigger_rate"] == 0.0
+
+
+def test_a_skill_cannot_be_expected_and_allowed(tmp_path):
+    path = tmp_path / "cases.jsonl"
+    path.write_text(json.dumps({"id": "x", "prompt": "p", "expected": ["a"], "allowed": ["a"]}))
+    with pytest.raises(ValueError, match="both expected and allowed"):
+        triggers.load_cases(path)
+
+
+def test_run_files_are_separated_by_case_set(tmp_path):
+    provider = ScriptedProvider({})
+    default = triggers.run_path(tmp_path, provider, CATALOG)
+    hard = triggers.run_path(tmp_path, provider, CATALOG, "triggers-hard")
+    assert default.name == f"scripted--m1--{triggers.catalog_hash(CATALOG)}.jsonl"
+    assert hard.name == f"scripted--m1--triggers-hard--{triggers.catalog_hash(CATALOG)}.jsonl"

@@ -44,8 +44,9 @@ or, if none apply:
 class Case:
     id: str
     prompt: str
-    expected: list[str]
+    expected: list[str]  # skills that must be loaded
     kind: str = ""
+    allowed: list[str] = field(default_factory=list)  # may be loaded without penalty
 
 
 @dataclass
@@ -74,7 +75,16 @@ def load_cases(path: str | Path) -> list[Case]:
     for line in Path(path).read_text(encoding="utf-8").splitlines():
         if line.strip():
             row = json.loads(line)
-            cases.append(Case(row["id"], row["prompt"], list(row["expected"]), row.get("kind", "")))
+            case = Case(
+                row["id"],
+                row["prompt"],
+                list(row["expected"]),
+                row.get("kind", ""),
+                list(row.get("allowed", [])),
+            )
+            if set(case.expected) & set(case.allowed):
+                raise ValueError(f"{case.id}: a skill can't be both expected and allowed")
+            cases.append(case)
     ids = [c.id for c in cases]
     duplicates = [i for i, n in Counter(ids).items() if n > 1]
     if duplicates:
@@ -133,9 +143,14 @@ def parse_choice(raw: str, valid: set[str]) -> tuple[list[str], str | None]:
     return chosen, (f"unknown skill names: {unknown}" if unknown else None)
 
 
-def run_path(out_dir: str | Path, provider: Provider, catalog: list) -> Path:
+def run_path(
+    out_dir: str | Path, provider: Provider, catalog: list, case_set: str = "triggers"
+) -> Path:
+    """One file per provider, model, case set and catalog. The default case set keeps the
+    original name so earlier runs still resume."""
     model = re.sub(r"[^A-Za-z0-9._-]+", "_", provider.model)
-    return Path(out_dir) / f"{provider.name}--{model}--{catalog_hash(catalog)}.jsonl"
+    middle = "" if case_set == "triggers" else f"{case_set}--"
+    return Path(out_dir) / f"{provider.name}--{model}--{middle}{catalog_hash(catalog)}.jsonl"
 
 
 def load_answers(path: Path) -> list[Answer]:
@@ -151,11 +166,12 @@ def run(
     trials: int,
     out_dir: str | Path,
     progress=None,
+    case_set: str = "triggers",
 ) -> tuple[Path, list[Answer]]:
     """Ask the provider about every (case, trial) not already in the run file."""
     if isinstance(provider, KeywordProvider):
         provider.set_catalog(catalog)
-    path = run_path(out_dir, provider, catalog)
+    path = run_path(out_dir, provider, catalog, case_set)
     path.parent.mkdir(parents=True, exist_ok=True)
     answers = load_answers(path)
     done = {(a.case, a.trial) for a in answers}
@@ -206,15 +222,15 @@ def score(cases: list[Case], answers: list[Answer], skills: list[str]) -> Report
     exact = positives_hit = positives = negatives = false_triggers = 0
     for a in answers:
         case = by_id[a.case]
-        got, want = set(a.chosen) & ours, set(case.expected)
+        got, want, allowed = set(a.chosen) & ours, set(case.expected), set(case.allowed)
         for s in skills:
             if s in got and s in want:
                 counts[s]["tp"] += 1
-            elif s in got:
+            elif s in got and s not in allowed:
                 counts[s]["fp"] += 1
-            elif s in want:
+            elif s in want and s not in got:
                 counts[s]["fn"] += 1
-        ok = got == want
+        ok = want <= got <= want | allowed
         exact += ok
         kinds[case.kind or "-"]["n"] += 1
         kinds[case.kind or "-"]["ok"] += ok
@@ -223,7 +239,7 @@ def score(cases: list[Case], answers: list[Answer], skills: list[str]) -> Report
             positives_hit += want <= got
         else:
             negatives += 1
-            false_triggers += bool(got)
+            false_triggers += bool(got - allowed)
         if not ok:
             report.mistakes.append(
                 {
