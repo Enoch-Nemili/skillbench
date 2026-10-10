@@ -37,3 +37,17 @@ A description edit is kept only if, over 3 trials on both Gemini models:
 3. round-1 accuracy stays where it was (no regression on the easy set).
 
 Otherwise it is reverted, and the attempt is still reported.
+
+## Amendment (written after the round-2 flash-lite results, before any description edit was tested)
+
+`gemini-3.8-flash` can't support the description experiments: its median latency was about
+77 s per answer, and repeated 503 "high demand" errors left it at 12 of 156 round-1 answers
+after about an hour. A description edit also changes the catalog, which would split its run.
+So:
+
+- The 3.8-flash run stops here. Its partial answers are kept in `evals/runs/` and reported as
+  incomplete; they are not used for any decision.
+- Description edits are decided on `gemini-3.5-flash-lite` alone, with the same thresholds:
+  hard-set accuracy up by at least 3 of 114 answers, no skill's hard-set recall down, and
+  round-1 accuracy unchanged (156 of 156).
+- One description is edited at a time, so each change in the numbers can be attributed.

@@ -1,0 +1,156 @@
+{"case": "retrieval-eval-01", "trial": 0, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 0.661}
+{"case": "retrieval-eval-02", "trial": 0, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 11.869}
+{"case": "retrieval-eval-03", "trial": 0, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.248}
+{"case": "retrieval-eval-04", "trial": 0, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 11.845}
+{"case": "retrieval-eval-05", "trial": 0, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 11.998}
+{"case": "retrieval-eval-06", "trial": 0, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.037}
+{"case": "retrieval-eval-07", "trial": 0, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.047}
+{"case": "retrieval-eval-08", "trial": 0, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 11.954}
+{"case": "retrieval-eval-09", "trial": 0, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.245}
+{"case": "retrieval-eval-10", "trial": 0, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 11.81}
+{"case": "mcp-server-hardening-01", "trial": 0, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.254}
+{"case": "mcp-server-hardening-02", "trial": 0, "chosen": ["mcp-builder", "mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\", \"mcp-builder\"]}", "error": null, "seconds": 11.752}
+{"case": "mcp-server-hardening-03", "trial": 0, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.002}
+{"case": "mcp-server-hardening-04", "trial": 0, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.924}
+{"case": "mcp-server-hardening-05", "trial": 0, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.035}
+{"case": "mcp-server-hardening-06", "trial": 0, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.139}
+{"case": "mcp-server-hardening-07", "trial": 0, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.194}
+{"case": "mcp-server-hardening-08", "trial": 0, "chosen": ["mcp-server-hardening"], "raw": "{\n  \"skills\": [\n    \"mcp-server-hardening\"\n  ]\n}", "error": null, "seconds": 11.613}
+{"case": "mcp-server-hardening-09", "trial": 0, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.004}
+{"case": "mcp-server-hardening-10", "trial": 0, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.212}
+{"case": "repro-before-fix-01", "trial": 0, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.922}
+{"case": "repro-before-fix-02", "trial": 0, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.057}
+{"case": "repro-before-fix-03", "trial": 0, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.902}
+{"case": "repro-before-fix-04", "trial": 0, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.113}
+{"case": "repro-before-fix-05", "trial": 0, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.848}
+{"case": "repro-before-fix-06", "trial": 0, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.389}
+{"case": "repro-before-fix-07", "trial": 0, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.978}
+{"case": "repro-before-fix-08", "trial": 0, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.6}
+{"case": "repro-before-fix-09", "trial": 0, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.646}
+{"case": "repro-before-fix-10", "trial": 0, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.475}
+{"case": "release-polish-01", "trial": 0, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.097}
+{"case": "release-polish-02", "trial": 0, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.081}
+{"case": "release-polish-03", "trial": 0, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 11.788}
+{"case": "release-polish-04", "trial": 0, "chosen": ["git-workflow", "release-polish"], "raw": "{\"skills\": [\"release-polish\", \"git-workflow\"]}", "error": null, "seconds": 11.794}
+{"case": "release-polish-05", "trial": 0, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.56}
+{"case": "release-polish-06", "trial": 0, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 11.975}
+{"case": "release-polish-07", "trial": 0, "chosen": ["release-polish", "writing-coach"], "raw": "{\"skills\": [\"release-polish\", \"writing-coach\"]}", "error": null, "seconds": 11.577}
+{"case": "release-polish-08", "trial": 0, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.075}
+{"case": "release-polish-09", "trial": 0, "chosen": ["git-workflow", "release-polish"], "raw": "{\"skills\": [\"release-polish\", \"git-workflow\"]}", "error": null, "seconds": 11.985}
+{"case": "release-polish-10", "trial": 0, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 13.103}
+{"case": "none-01", "trial": 0, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 11.079}
+{"case": "none-02", "trial": 0, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 11.788}
+{"case": "none-03", "trial": 0, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 12.136}
+{"case": "none-04", "trial": 0, "chosen": ["writing-coach"], "raw": "{\n  \"skills\": [\n    \"writing-coach\"\n  ]\n}", "error": null, "seconds": 11.979}
+{"case": "none-05", "trial": 0, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 12.006}
+{"case": "none-06", "trial": 0, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 12.021}
+{"case": "none-07", "trial": 0, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 11.927}
+{"case": "none-08", "trial": 0, "chosen": ["frontend-design"], "raw": "{\"skills\": [\"frontend-design\"]}", "error": null, "seconds": 11.885}
+{"case": "none-09", "trial": 0, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 12.282}
+{"case": "none-10", "trial": 0, "chosen": ["git-workflow"], "raw": "{\"skills\": [\"git-workflow\"]}", "error": null, "seconds": 12.183}
+{"case": "none-11", "trial": 0, "chosen": ["writing-coach"], "raw": "{\"skills\": [\"writing-coach\"]}", "error": null, "seconds": 11.845}
+{"case": "none-12", "trial": 0, "chosen": ["data-visualization"], "raw": "{\"skills\": [\"data-visualization\"]}", "error": null, "seconds": 12.082}
+{"case": "retrieval-eval-01", "trial": 1, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 13.547}
+{"case": "retrieval-eval-02", "trial": 1, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 10.238}
+{"case": "retrieval-eval-03", "trial": 1, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.162}
+{"case": "retrieval-eval-04", "trial": 1, "chosen": ["retrieval-eval"], "raw": "{\n  \"skills\": [\n    \"retrieval-eval\"\n  ]\n}", "error": null, "seconds": 11.945}
+{"case": "retrieval-eval-05", "trial": 1, "chosen": ["retrieval-eval"], "raw": "{\n  \"skills\": [\n    \"retrieval-eval\"\n  ]\n}", "error": null, "seconds": 12.091}
+{"case": "retrieval-eval-06", "trial": 1, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.331}
+{"case": "retrieval-eval-07", "trial": 1, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 11.561}
+{"case": "retrieval-eval-08", "trial": 1, "chosen": ["retrieval-eval"], "raw": "{\n  \"skills\": [\n    \"retrieval-eval\"\n  ]\n}", "error": null, "seconds": 11.941}
+{"case": "retrieval-eval-09", "trial": 1, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 11.982}
+{"case": "retrieval-eval-10", "trial": 1, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.091}
+{"case": "mcp-server-hardening-01", "trial": 1, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.168}
+{"case": "mcp-server-hardening-02", "trial": 1, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.773}
+{"case": "mcp-server-hardening-03", "trial": 1, "chosen": ["mcp-server-hardening"], "raw": "{\n  \"skills\": [\n    \"mcp-server-hardening\"\n  ]\n}", "error": null, "seconds": 12.077}
+{"case": "mcp-server-hardening-04", "trial": 1, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.952}
+{"case": "mcp-server-hardening-05", "trial": 1, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.067}
+{"case": "mcp-server-hardening-06", "trial": 1, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.133}
+{"case": "mcp-server-hardening-07", "trial": 1, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.766}
+{"case": "mcp-server-hardening-08", "trial": 1, "chosen": ["mcp-server-hardening"], "raw": "{\n  \"skills\": [\n    \"mcp-server-hardening\"\n  ]\n}", "error": null, "seconds": 12.083}
+{"case": "mcp-server-hardening-09", "trial": 1, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.046}
+{"case": "mcp-server-hardening-10", "trial": 1, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.774}
+{"case": "repro-before-fix-01", "trial": 1, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.224}
+{"case": "repro-before-fix-02", "trial": 1, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.818}
+{"case": "repro-before-fix-03", "trial": 1, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.057}
+{"case": "repro-before-fix-04", "trial": 1, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.17}
+{"case": "repro-before-fix-05", "trial": 1, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.879}
+{"case": "repro-before-fix-06", "trial": 1, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.981}
+{"case": "repro-before-fix-07", "trial": 1, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.082}
+{"case": "repro-before-fix-08", "trial": 1, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.193}
+{"case": "repro-before-fix-09", "trial": 1, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.87}
+{"case": "repro-before-fix-10", "trial": 1, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.826}
+{"case": "release-polish-01", "trial": 1, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 11.931}
+{"case": "release-polish-02", "trial": 1, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.057}
+{"case": "release-polish-03", "trial": 1, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.007}
+{"case": "release-polish-04", "trial": 1, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.083}
+{"case": "release-polish-05", "trial": 1, "chosen": ["release-polish"], "raw": "{\n  \"skills\": [\n    \"release-polish\"\n  ]\n}", "error": null, "seconds": 12.135}
+{"case": "release-polish-06", "trial": 1, "chosen": ["release-polish"], "raw": "{\n  \"skills\": [\n    \"release-polish\"\n  ]\n}", "error": null, "seconds": 11.826}
+{"case": "release-polish-07", "trial": 1, "chosen": ["release-polish", "writing-coach"], "raw": "{\"skills\": [\"release-polish\", \"writing-coach\"]}", "error": null, "seconds": 12.187}
+{"case": "release-polish-08", "trial": 1, "chosen": ["release-polish"], "raw": "{\n  \"skills\": [\n    \"release-polish\"\n  ]\n}", "error": null, "seconds": 11.979}
+{"case": "release-polish-09", "trial": 1, "chosen": ["git-workflow", "release-polish"], "raw": "{\"skills\": [\"release-polish\", \"git-workflow\"]}", "error": null, "seconds": 11.98}
+{"case": "release-polish-10", "trial": 1, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 11.821}
+{"case": "none-01", "trial": 1, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 11.936}
+{"case": "none-02", "trial": 1, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 12.082}
+{"case": "none-03", "trial": 1, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 12.084}
+{"case": "none-04", "trial": 1, "chosen": ["writing-coach"], "raw": "{\"skills\": [\"writing-coach\"]}", "error": null, "seconds": 11.981}
+{"case": "none-05", "trial": 1, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 11.981}
+{"case": "none-06", "trial": 1, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 13.004}
+{"case": "none-07", "trial": 1, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 11.039}
+{"case": "none-08", "trial": 1, "chosen": ["frontend-design"], "raw": "{\"skills\": [\"frontend-design\"]}", "error": null, "seconds": 12.005}
+{"case": "none-09", "trial": 1, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 12.079}
+{"case": "none-10", "trial": 1, "chosen": ["git-workflow"], "raw": "{\"skills\": [\"git-workflow\"]}", "error": null, "seconds": 11.937}
+{"case": "none-11", "trial": 1, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 12.23}
+{"case": "none-12", "trial": 1, "chosen": ["data-visualization"], "raw": "{\"skills\": [\"data-visualization\"]}", "error": null, "seconds": 11.825}
+{"case": "retrieval-eval-01", "trial": 2, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.034}
+{"case": "retrieval-eval-02", "trial": 2, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.102}
+{"case": "retrieval-eval-03", "trial": 2, "chosen": ["retrieval-eval"], "raw": "{\n  \"skills\": [\n    \"retrieval-eval\"\n  ]\n}", "error": null, "seconds": 11.988}
+{"case": "retrieval-eval-04", "trial": 2, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 11.854}
+{"case": "retrieval-eval-05", "trial": 2, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 11.878}
+{"case": "retrieval-eval-06", "trial": 2, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.081}
+{"case": "retrieval-eval-07", "trial": 2, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.311}
+{"case": "retrieval-eval-08", "trial": 2, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 11.774}
+{"case": "retrieval-eval-09", "trial": 2, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.057}
+{"case": "retrieval-eval-10", "trial": 2, "chosen": ["retrieval-eval"], "raw": "{\"skills\": [\"retrieval-eval\"]}", "error": null, "seconds": 12.159}
+{"case": "mcp-server-hardening-01", "trial": 2, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.697}
+{"case": "mcp-server-hardening-02", "trial": 2, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.981}
+{"case": "mcp-server-hardening-03", "trial": 2, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.05}
+{"case": "mcp-server-hardening-04", "trial": 2, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.009}
+{"case": "mcp-server-hardening-05", "trial": 2, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.983}
+{"case": "mcp-server-hardening-06", "trial": 2, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.981}
+{"case": "mcp-server-hardening-07", "trial": 2, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.978}
+{"case": "mcp-server-hardening-08", "trial": 2, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.242}
+{"case": "mcp-server-hardening-09", "trial": 2, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 11.815}
+{"case": "mcp-server-hardening-10", "trial": 2, "chosen": ["mcp-server-hardening"], "raw": "{\"skills\": [\"mcp-server-hardening\"]}", "error": null, "seconds": 12.041}
+{"case": "repro-before-fix-01", "trial": 2, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.814}
+{"case": "repro-before-fix-02", "trial": 2, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.289}
+{"case": "repro-before-fix-03", "trial": 2, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.983}
+{"case": "repro-before-fix-04", "trial": 2, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.981}
+{"case": "repro-before-fix-05", "trial": 2, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.011}
+{"case": "repro-before-fix-06", "trial": 2, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.945}
+{"case": "repro-before-fix-07", "trial": 2, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.186}
+{"case": "repro-before-fix-08", "trial": 2, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.851}
+{"case": "repro-before-fix-09", "trial": 2, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 11.958}
+{"case": "repro-before-fix-10", "trial": 2, "chosen": ["repro-before-fix"], "raw": "{\"skills\": [\"repro-before-fix\"]}", "error": null, "seconds": 12.028}
+{"case": "release-polish-01", "trial": 2, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.488}
+{"case": "release-polish-02", "trial": 2, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 11.397}
+{"case": "release-polish-03", "trial": 2, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.125}
+{"case": "release-polish-04", "trial": 2, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.105}
+{"case": "release-polish-05", "trial": 2, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 11.876}
+{"case": "release-polish-06", "trial": 2, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.79}
+{"case": "release-polish-07", "trial": 2, "chosen": ["release-polish", "writing-coach"], "raw": "{\"skills\": [\"release-polish\", \"writing-coach\"]}", "error": null, "seconds": 11.067}
+{"case": "release-polish-08", "trial": 2, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.186}
+{"case": "release-polish-09", "trial": 2, "chosen": ["git-workflow", "release-polish"], "raw": "{\"skills\": [\"git-workflow\", \"release-polish\"]}", "error": null, "seconds": 11.816}
+{"case": "release-polish-10", "trial": 2, "chosen": ["release-polish"], "raw": "{\"skills\": [\"release-polish\"]}", "error": null, "seconds": 12.141}
+{"case": "none-01", "trial": 2, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 15.691}
+{"case": "none-02", "trial": 2, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 13.082}
+{"case": "none-03", "trial": 2, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 9.216}
+{"case": "none-04", "trial": 2, "chosen": ["writing-coach"], "raw": "{\"skills\": [\"writing-coach\"]}", "error": null, "seconds": 13.677}
+{"case": "none-05", "trial": 2, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 8.285}
+{"case": "none-06", "trial": 2, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 14.082}
+{"case": "none-07", "trial": 2, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 9.915}
+{"case": "none-08", "trial": 2, "chosen": ["frontend-design"], "raw": "{\"skills\": [\"frontend-design\"]}", "error": null, "seconds": 12.11}
+{"case": "none-09", "trial": 2, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 11.954}
+{"case": "none-10", "trial": 2, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 12.225}
+{"case": "none-11", "trial": 2, "chosen": [], "raw": "{\"skills\": []}", "error": null, "seconds": 11.857}
+{"case": "none-12", "trial": 2, "chosen": ["data-visualization"], "raw": "{\"skills\": [\"data-visualization\"]}", "error": null, "seconds": 11.839}

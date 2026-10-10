@@ -12,7 +12,7 @@ Each skill is distilled from a project that was built and measured first. `retri
 example, is the method used to tune [PaperMind](https://github.com/Enoch-Nemili/papermind)'s
 hybrid search.
 
-> **Status:** v0.2 in progress: linter, 4 skills, and the trigger-eval harness. LLM results next.
+> **Status:** v0.2 in progress: linter, 4 skills, trigger evals with LLM results. Description fixes next.
 
 ## Skills
 
@@ -98,13 +98,18 @@ skillbench triggers skills/ --provider ollama --model qwen3:8b --trials 3
 
 Gemini reads `GEMINI_API_KEY` from the environment or a git-ignored `.env`.
 
-**Results so far**
+**Results** ([full write-up](evals/RESULTS.md))
 
-| Router | Accuracy | Recall | False triggers | Notes |
-|---|---:|---:|---:|---|
-| Keyword overlap (offline baseline) | 73% | 70% | 17% | Fixed threshold, not tuned on this set. Misses implicit bug reports and confuses `mcp-builder` with `mcp-server-hardening`. |
+| Router | Round 1 (52 cases × 3) | Hard set (38 cases × 3) | Hard-set false triggers | Median latency |
+|---|---:|---:|---:|---:|
+| Keyword overlap (offline baseline) | 73% | 37% | 46% | – |
+| `gemini-3.5-flash-lite` | **100%** | **93%** | 13% | 0.6 s |
 
-LLM routers are next; see the roadmap.
+Round 1 hit a ceiling, so a [pre-registered](evals/PROTOCOL.md) hard set followed: multi-skill,
+confusable, terse, non-English and long requests, plus cases where a distractor is the right
+answer. Two of its three predictions were wrong. The real weak spot: `retrieval-eval` loads
+for conceptual questions about metrics ("What's the difference between hit@1 and recall@5?"),
+which accounts for every hard-set false trigger. Fixing its description is the next experiment.
 
 ## Roadmap
 
@@ -114,7 +119,8 @@ LLM routers are next; see the roadmap.
 - [x] Skill 3: `repro-before-fix`
 - [x] Skill 4: `release-polish`
 - [x] Trigger eval harness: 52 labeled requests, distractor skills, Gemini/Ollama/keyword routers, resumable runs
-- [ ] Trigger results for LLM routers, then description fixes measured against them
+- [x] Trigger results: round 1 (ceiling) and a pre-registered hard set
+- [ ] Description fixes measured against the hard set
 - [ ] Outcome evals: the same tasks with and without the skill, scored by deterministic checks
 - [x] CI: tests, ruff and `skillbench lint --strict` on every push and pull request
 - [ ] Results table in this README, v1.0.0
