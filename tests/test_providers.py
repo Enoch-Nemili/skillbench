@@ -207,3 +207,22 @@ def test_gemini_gives_up_cleanly_when_the_network_keeps_failing(monkeypatch, gem
         monkeypatch.setattr(providers, "GEMINI_URL", url)
         with pytest.raises(ProviderError, match="network"):
             GeminiProvider("m1", rpm=None, timeout=0.2).complete("s", "u")
+
+
+def test_latency_excludes_rate_limit_waiting(monkeypatch):
+    """Regression: answer latency included the rate limiter's sleep, so fast models all
+    looked like they took exactly 60/rpm seconds."""
+    clock = {"t": 0.0}
+    monkeypatch.setattr(providers.time, "monotonic", lambda: clock["t"])
+    monkeypatch.setattr(providers.time, "perf_counter", lambda: clock["t"])
+    monkeypatch.setattr(providers.time, "sleep", lambda s: clock.__setitem__("t", clock["t"] + s))
+
+    class TwoSecondModel(providers.Provider):
+        def _complete(self, system, user):
+            clock["t"] += 2.0
+            return user
+
+    provider = TwoSecondModel("m", rpm=5)  # 12 s between calls
+    provider.complete("s", "first")
+    provider.complete("s", "second")  # waits ~10 s for the limiter, then 2 s of model time
+    assert provider.last_seconds == 2.0

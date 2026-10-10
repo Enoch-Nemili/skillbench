@@ -18,7 +18,6 @@ import hashlib
 import json
 import random
 import re
-import time
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -164,12 +163,9 @@ def run(
     todo = [(c, t) for t in range(trials) for c in cases if (c.id, t) not in done]
     with path.open("a", encoding="utf-8") as fh:
         for i, (case, trial) in enumerate(todo, 1):
-            start = time.perf_counter()
             raw = provider.complete(system_prompt(catalog, seed=trial), case.prompt)
             chosen, error = parse_choice(raw, valid)
-            answer = Answer(
-                case.id, trial, chosen, raw, error, round(time.perf_counter() - start, 3)
-            )
+            answer = Answer(case.id, trial, chosen, raw, error, provider.last_seconds)
             fh.write(json.dumps(answer.__dict__) + "\n")
             fh.flush()
             answers.append(answer)
@@ -180,6 +176,15 @@ def run(
 
 def _ratio(num: int, den: int) -> float | None:
     return round(num / den, 3) if den else None
+
+
+def _median(values: list[float]) -> float | None:
+    if not values:
+        return None
+    ordered = sorted(values)
+    mid = len(ordered) // 2
+    middle = ordered[mid] if len(ordered) % 2 else (ordered[mid - 1] + ordered[mid]) / 2
+    return round(middle, 2)
 
 
 def _f1(precision: float | None, recall: float | None) -> float | None:
@@ -256,6 +261,7 @@ def score(cases: list[Case], answers: list[Answer], skills: list[str]) -> Report
         "false_trigger_rate": _ratio(false_triggers, negatives),
         "parse_errors": sum(1 for a in answers if a.error),
         "consistency": _ratio(sum(len(trials_by_case[c]) == 1 for c in multi), len(multi)),
+        "median_seconds": _median([a.seconds for a in answers]),
     }
     report.by_kind = {
         k: {"n": v["n"], "accuracy": _ratio(v["ok"], v["n"])} for k, v in kinds.items()
@@ -274,7 +280,8 @@ def to_markdown(report: Report, title: str) -> str:
         "",
         f"{s['answers']} answers · accuracy {_pct(s['accuracy'])} · recall {_pct(s['recall'])} · "
         f"false triggers {_pct(s['false_trigger_rate'])} · parse errors {s['parse_errors']}"
-        + (f" · consistency {_pct(s['consistency'])}" if s["consistency"] is not None else ""),
+        + (f" · consistency {_pct(s['consistency'])}" if s["consistency"] is not None else "")
+        + (f" · median {s['median_seconds']} s/answer" if s.get("median_seconds") else ""),
         "",
         "| Skill | Precision | Recall | F1 | TP | FP | FN |",
         "|---|---:|---:|---:|---:|---:|---:|",
