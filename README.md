@@ -21,6 +21,7 @@ hybrid search.
 | [`retrieval-eval`](skills/retrieval-eval/SKILL.md) | Scores a RAG/search system with hit@1, recall@k and MRR and picks between configurations using a decision rule fixed before the run. Bundles a stdlib scoring/compare script. | PaperMind hybrid search |
 | [`mcp-server-hardening`](skills/mcp-server-hardening/SKILL.md) | Reviews an MCP server against a 34-point checklist tied to the MCP spec (bind address, auth, Origin/DNS rebinding, token passthrough, path and URL limits, secrets, container) and probes the running server to prove it. | PaperMind's HTTP mode and auth |
 | [`repro-before-fix`](skills/repro-before-fix/SKILL.md) | Debugs by turning a bug into a failing test first, then root cause, smallest fix, and a kept regression test. Covers flaky failures, environment diffs and `git bisect`; bundles a script that runs a command N times and classifies it as passing, failing or flaky. | Bugs fixed in PaperMind (dead pool connections, DNS rebinding) |
+| [`release-polish`](skills/release-polish/SKILL.md) | Takes a repo from working to releasable: README order that leads with value and a tested quick start, license, changelog and semver, security and contributing docs, CI gate, tag and release notes. Bundles a read-only checker for missing files, changelog/tag mismatches, tracked secrets and large files. | Preparing PaperMind and other repos for v1.0.0 |
 
 A skill is a folder with a `SKILL.md` (YAML frontmatter + instructions) and optional
 `scripts/`, `references/` and `assets/`. Agents read only each skill's name and description at
@@ -77,7 +78,7 @@ both on the same 18 cases and checks they agree.
 - [x] Skill 1: `retrieval-eval`
 - [x] Skill 2: `mcp-server-hardening`
 - [x] Skill 3: `repro-before-fix`
-- [ ] Skill 4: release polish
+- [x] Skill 4: `release-polish`
 - [ ] Trigger evals: should-trigger / shouldn't-trigger prompts per skill → precision and recall
 - [ ] Outcome evals: the same tasks with and without the skill, scored by deterministic checks
 - [x] CI: tests, ruff and `skillbench lint --strict` on every push and pull request
