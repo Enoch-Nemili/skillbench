@@ -114,6 +114,12 @@ def test_score_metrics():
     assert [m["case"] for m in report.mistakes] == ["b1", "n2"]
 
 
+def test_median_latency():
+    cases = [Case("a1", "x", ["alpha"])]
+    answers = [Answer("a1", t, ["alpha"], "", None, s) for t, s in enumerate([1.0, 9.0, 2.0, 4.0])]
+    assert triggers.score(cases, answers, OURS).summary["median_seconds"] == 3.0
+
+
 def test_consistency_across_trials():
     cases = [Case("a1", "x", ["alpha"]), Case("b1", "y", ["beta"])]
     answers = [

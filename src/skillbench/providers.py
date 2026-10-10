@@ -76,13 +76,19 @@ class Provider:
         self.temperature = temperature
         self.min_interval = 60.0 / rpm if rpm else 0.0
         self._last_call = 0.0
+        self.last_seconds = 0.0
 
     def complete(self, system: str, user: str) -> str:
         wait = self.min_interval - (time.monotonic() - self._last_call)
         if wait > 0:
             time.sleep(wait)
         self._last_call = time.monotonic()
-        return self._complete(system, user)
+        start = time.perf_counter()
+        try:
+            return self._complete(system, user)
+        finally:
+            # Model time only: the rate limiter's wait above is not the model's latency.
+            self.last_seconds = round(time.perf_counter() - start, 3)
 
     def _complete(self, system: str, user: str) -> str:  # pragma: no cover - interface
         raise NotImplementedError
