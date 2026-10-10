@@ -1,0 +1,8 @@
+{"name": "pdf-tools", "description": "Read, create, merge, split and fill PDF files, and extract their text and tables. Use when the user mentions a PDF or asks to produce one."}
+{"name": "docx-editor", "description": "Create and edit Word documents (.docx), including tracked changes, comments and formatting. Use when the user asks for a Word file or attaches one."}
+{"name": "frontend-design", "description": "Build polished web interfaces and components with strong visual design. Use when the user asks for a web page, UI component, landing page or styling changes."}
+{"name": "webapp-testing", "description": "Test web applications in a real browser with Playwright: click through flows, take screenshots and check console errors. Use when the user wants to test or debug a web UI."}
+{"name": "mcp-builder", "description": "Guide for creating Model Context Protocol (MCP) servers that expose tools, resources and prompts in Python or TypeScript. Use when the user wants to build a new MCP server or integrate an API through MCP."}
+{"name": "data-visualization", "description": "Turn data into clear charts and dashboards with good color and labeling. Use when the user asks for a chart, graph, plot or dashboard."}
+{"name": "git-workflow", "description": "Branching, commits, rebasing, resolving merge conflicts and opening pull requests with git and GitHub. Use when the user asks for help with git commands or a PR."}
+{"name": "writing-coach", "description": "Edit prose for clarity and tone: emails, essays, cover letters and announcements. Use when the user asks to write, rewrite or polish text."}

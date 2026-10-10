@@ -12,7 +12,7 @@ Each skill is distilled from a project that was built and measured first. `retri
 example, is the method used to tune [PaperMind](https://github.com/Enoch-Nemili/papermind)'s
 hybrid search.
 
-> **Status:** v0.1: linter and first skills. Evals are being built next; see the roadmap.
+> **Status:** v0.2 in progress: linter, 4 skills, and the trigger-eval harness. LLM results next.
 
 ## Skills
 
@@ -72,6 +72,40 @@ both on the same 18 cases and checks they agree.
 
 `--format json` for machine output, `--strict` to fail on warnings (used in CI).
 
+## Trigger evals
+
+A skill only helps if the agent loads it for the right requests and leaves it alone for the rest.
+Agents decide from each skill's name and description alone, so that's what gets tested.
+
+**Method.** [`evals/triggers.jsonl`](evals/triggers.jsonl) holds 52 requests: 10 per skill
+(explicit, implicit and contextual phrasings, most never naming the skill) and 12 that should
+load none of them (6 unrelated, 6 near misses such as "What does MRR stand for?"). For each
+request, a model sees the same catalog an agent would: the 4 skills plus 8 realistic
+[distractors](evals/distractors.jsonl) (including `mcp-builder`, a near neighbour of
+`mcp-server-hardening`), shuffled per trial. It answers with the skills it would load, as JSON.
+
+Metrics cover our skills only: per-skill precision and recall, accuracy (exactly the right set),
+recall on requests that need a skill, and the false-trigger rate on requests that don't. Every
+answer is saved in [`evals/runs/`](evals/runs/), so runs can be audited, and a run stopped by a
+rate limit resumes where it left off.
+
+```bash
+skillbench triggers skills/                                        # offline keyword baseline
+skillbench models --provider gemini                                # models your key can use
+skillbench triggers skills/ --provider gemini --model MODEL_ID --trials 3
+skillbench triggers skills/ --provider ollama --model qwen3:8b --trials 3
+```
+
+Gemini reads `GEMINI_API_KEY` from the environment or a git-ignored `.env`.
+
+**Results so far**
+
+| Router | Accuracy | Recall | False triggers | Notes |
+|---|---:|---:|---:|---|
+| Keyword overlap (offline baseline) | 73% | 70% | 17% | Fixed threshold, not tuned on this set. Misses implicit bug reports and confuses `mcp-builder` with `mcp-server-hardening`. |
+
+LLM routers are next; see the roadmap.
+
 ## Roadmap
 
 - [x] Linter for the SKILL.md spec, with reference-validator conformance tests
@@ -79,7 +113,8 @@ both on the same 18 cases and checks they agree.
 - [x] Skill 2: `mcp-server-hardening`
 - [x] Skill 3: `repro-before-fix`
 - [x] Skill 4: `release-polish`
-- [ ] Trigger evals: should-trigger / shouldn't-trigger prompts per skill → precision and recall
+- [x] Trigger eval harness: 52 labeled requests, distractor skills, Gemini/Ollama/keyword routers, resumable runs
+- [ ] Trigger results for LLM routers, then description fixes measured against them
 - [ ] Outcome evals: the same tasks with and without the skill, scored by deterministic checks
 - [x] CI: tests, ruff and `skillbench lint --strict` on every push and pull request
 - [ ] Results table in this README, v1.0.0

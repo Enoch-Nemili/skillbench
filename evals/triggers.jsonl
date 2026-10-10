@@ -1,0 +1,52 @@
+{"id": "retrieval-eval-01", "prompt": "Can you set up an evaluation for my RAG pipeline's retrieval? I want hit@1 and MRR.", "expected": ["retrieval-eval"], "kind": "explicit"}
+{"id": "retrieval-eval-02", "prompt": "Compare BM25 against embedding search on my document QA set and tell me which one to keep.", "expected": ["retrieval-eval"], "kind": "explicit"}
+{"id": "retrieval-eval-03", "prompt": "I switched chunk size from 512 to 1024 tokens and the answers feel worse. How do I check if that's actually true?", "expected": ["retrieval-eval"], "kind": "implicit"}
+{"id": "retrieval-eval-04", "prompt": "Should I add a cross-encoder reranker to our search? I don't want to just eyeball it.", "expected": ["retrieval-eval"], "kind": "implicit"}
+{"id": "retrieval-eval-05", "prompt": "Our vector search keeps returning the wrong policy document for HR questions. I need a way to measure how often it gets the right one.", "expected": ["retrieval-eval"], "kind": "implicit"}
+{"id": "retrieval-eval-06", "prompt": "Help me write a set of test questions with known answers for our internal docs search.", "expected": ["retrieval-eval"], "kind": "implicit"}
+{"id": "retrieval-eval-07", "prompt": "What weight should I give keyword results versus semantic results when I merge them? I want a principled way to pick it.", "expected": ["retrieval-eval"], "kind": "implicit"}
+{"id": "retrieval-eval-08", "prompt": "Here are two runs of our retriever, baseline.jsonl and hybrid.jsonl, each listing the ranked document ids per query. Which configuration is better?", "expected": ["retrieval-eval"], "kind": "contextual"}
+{"id": "retrieval-eval-09", "prompt": "Before we switch the knowledge base to the new embedding model, I want numbers showing search quality didn't regress.", "expected": ["retrieval-eval"], "kind": "contextual"}
+{"id": "retrieval-eval-10", "prompt": "Recall looks great but users still complain the top result is wrong. How should I measure that?", "expected": ["retrieval-eval"], "kind": "contextual"}
+{"id": "mcp-server-hardening-01", "prompt": "Review my MCP server for security issues before I deploy it.", "expected": ["mcp-server-hardening"], "kind": "explicit"}
+{"id": "mcp-server-hardening-02", "prompt": "I'm adding Streamable HTTP transport to my Model Context Protocol server. What auth should it have?", "expected": ["mcp-server-hardening"], "kind": "explicit"}
+{"id": "mcp-server-hardening-03", "prompt": "Is it safe to run my MCP server in Docker bound to 0.0.0.0?", "expected": ["mcp-server-hardening"], "kind": "implicit"}
+{"id": "mcp-server-hardening-04", "prompt": "My MCP tool takes a file path from the model and reads it. How do I stop it from reading ~/.ssh?", "expected": ["mcp-server-hardening"], "kind": "implicit"}
+{"id": "mcp-server-hardening-05", "prompt": "Should my MCP server just forward the user's GitHub OAuth token to the GitHub API?", "expected": ["mcp-server-hardening"], "kind": "implicit"}
+{"id": "mcp-server-hardening-06", "prompt": "Someone said local MCP servers are vulnerable to DNS rebinding. How do I check mine?", "expected": ["mcp-server-hardening"], "kind": "implicit"}
+{"id": "mcp-server-hardening-07", "prompt": "Here's my FastMCP server. One tool downloads a URL the model gives it. Could a malicious prompt make it fetch the cloud metadata endpoint?", "expected": ["mcp-server-hardening"], "kind": "contextual"}
+{"id": "mcp-server-hardening-08", "prompt": "We're about to let teammates connect to our internal MCP server over the office network. What needs to be locked down first?", "expected": ["mcp-server-hardening"], "kind": "contextual"}
+{"id": "mcp-server-hardening-09", "prompt": "Write a checklist for auditing the tools our MCP server exposes to Claude.", "expected": ["mcp-server-hardening"], "kind": "contextual"}
+{"id": "mcp-server-hardening-10", "prompt": "When a tool fails, my MCP server sends the full Python traceback back to the client. Is that a problem?", "expected": ["mcp-server-hardening"], "kind": "contextual"}
+{"id": "repro-before-fix-01", "prompt": "There's a bug in checkout: the total is wrong when the cart has a discount code. Can you fix it?", "expected": ["repro-before-fix"], "kind": "explicit"}
+{"id": "repro-before-fix-02", "prompt": "Our test suite fails randomly on CI about one run in five. Help me find out why.", "expected": ["repro-before-fix"], "kind": "explicit"}
+{"id": "repro-before-fix-03", "prompt": "Getting KeyError: 'user_id' in production but I can't make it happen locally.", "expected": ["repro-before-fix"], "kind": "implicit"}
+{"id": "repro-before-fix-04", "prompt": "Everything worked last week and now the build fails. Nothing obvious changed.", "expected": ["repro-before-fix"], "kind": "implicit"}
+{"id": "repro-before-fix-05", "prompt": "The app crashes when I upload images bigger than about 20 MB.", "expected": ["repro-before-fix"], "kind": "implicit"}
+{"id": "repro-before-fix-06", "prompt": "My script works on my laptop but fails inside the Docker container with a permission denied error.", "expected": ["repro-before-fix"], "kind": "implicit"}
+{"id": "repro-before-fix-07", "prompt": "After upgrading pandas, our monthly report has NaNs in the revenue column.", "expected": ["repro-before-fix"], "kind": "implicit"}
+{"id": "repro-before-fix-08", "prompt": "Users say that logging out sometimes doesn't clear their session. Here's the logout handler.", "expected": ["repro-before-fix"], "kind": "contextual"}
+{"id": "repro-before-fix-09", "prompt": "test_checkout passes when I run it alone but fails when I run the whole suite.", "expected": ["repro-before-fix"], "kind": "contextual"}
+{"id": "repro-before-fix-10", "prompt": "Why does this endpoint return a 500 only on the first request after a deploy?", "expected": ["repro-before-fix"], "kind": "contextual"}
+{"id": "release-polish-01", "prompt": "Cut a v1.0.0 release of this repo with proper release notes.", "expected": ["release-polish"], "kind": "explicit"}
+{"id": "release-polish-02", "prompt": "Write a CHANGELOG covering everything since v0.3.0.", "expected": ["release-polish"], "kind": "explicit"}
+{"id": "release-polish-03", "prompt": "I want to open-source this repo. What do I need to do first?", "expected": ["release-polish"], "kind": "implicit"}
+{"id": "release-polish-04", "prompt": "Make my GitHub project look professional for recruiters.", "expected": ["release-polish"], "kind": "implicit"}
+{"id": "release-polish-05", "prompt": "Is my repo ready to make public? I'm worried I committed an API key at some point.", "expected": ["release-polish"], "kind": "implicit"}
+{"id": "release-polish-06", "prompt": "Should the next version be 1.4.0 or 2.0.0? We renamed a public function.", "expected": ["release-polish"], "kind": "implicit"}
+{"id": "release-polish-07", "prompt": "Rewrite my README so people understand what the project does in the first ten seconds.", "expected": ["release-polish"], "kind": "implicit"}
+{"id": "release-polish-08", "prompt": "Add a license, a contributing guide and issue templates to this repository.", "expected": ["release-polish"], "kind": "contextual"}
+{"id": "release-polish-09", "prompt": "Tag the current main branch as a release and publish it on GitHub.", "expected": ["release-polish"], "kind": "contextual"}
+{"id": "release-polish-10", "prompt": "We're publishing our internal CLI tool on PyPI and GitHub next week. Get the repo in shape.", "expected": ["release-polish"], "kind": "contextual"}
+{"id": "none-01", "prompt": "Write a haiku about autumn leaves.", "expected": [], "kind": "unrelated"}
+{"id": "none-02", "prompt": "Explain the difference between TCP and UDP.", "expected": [], "kind": "unrelated"}
+{"id": "none-03", "prompt": "Translate this paragraph into Spanish.", "expected": [], "kind": "unrelated"}
+{"id": "none-04", "prompt": "Draft an email to my professor asking for a one-week extension.", "expected": [], "kind": "unrelated"}
+{"id": "none-05", "prompt": "Design a Postgres schema for a library management system.", "expected": [], "kind": "unrelated"}
+{"id": "none-06", "prompt": "Set up a Python virtual environment and install requests.", "expected": [], "kind": "unrelated"}
+{"id": "none-07", "prompt": "What does MRR stand for in information retrieval?", "expected": [], "kind": "near-miss"}
+{"id": "none-08", "prompt": "Add a dark mode toggle to the settings page.", "expected": [], "kind": "near-miss"}
+{"id": "none-09", "prompt": "Write unit tests for the new pagination helper.", "expected": [], "kind": "near-miss"}
+{"id": "none-10", "prompt": "Summarize this pull request for my standup.", "expected": [], "kind": "near-miss"}
+{"id": "none-11", "prompt": "What's a good name for my new open-source project?", "expected": [], "kind": "near-miss"}
+{"id": "none-12", "prompt": "Convert this CSV of monthly sales into a bar chart.", "expected": [], "kind": "near-miss"}
