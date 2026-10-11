@@ -128,3 +128,13 @@ def test_cli_json_with_scripted_provider(setup, monkeypatch, capsys):
     assert code == 0
     report = json.loads(capsys.readouterr().out)
     assert report["overall"]["with"]["pass_rate"] == 1.0
+
+
+def test_outcome_runs_never_use_json_mode(setup):
+    """Regression: the first outcome run was invalid because answers were forced into JSON."""
+    tasks = outcomes.load_tasks(setup / "tasks")
+    bodies = outcomes.skill_bodies([str(setup / "skills")])
+    provider = EchoSkill()
+    assert provider.json_mode is True
+    outcomes.run(tasks, bodies, provider, 1, setup / "out")
+    assert provider.json_mode is False

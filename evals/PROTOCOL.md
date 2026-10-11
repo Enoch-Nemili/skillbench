@@ -99,3 +99,17 @@ if a grader turns out to be wrong, the fix and its effect on the numbers are rep
   for a good review, not sufficient, so these scores are an upper bound on real improvement.
   The two debugging tasks are graded by execution and don't have this weakness.
 - The skill text and the tasks were written by the same author.
+
+## Amendment: first outcome run invalid (written before the re-run)
+
+The first run (`runs/gemini--gemini-3.5-flash-lite--outcomes--83dc38b3.*`) is invalid and is not
+interpreted. The Gemini provider always requested JSON output, a setting meant only for trigger
+evals, so every outcome answer came back as a JSON object instead of prose and code blocks. The
+graders found no code files to run, and JSON mode also corrupted the code itself (for example
+`def:` with no function name). It failed both conditions alike, so it measured the harness,
+not the skills.
+
+Fix: outcome runs now request plain text (regression tests in `tests/test_providers.py` and
+`tests/test_outcomes.py`), and the harness version is part of the run file name, so the re-run
+starts fresh instead of resuming the broken file. Tasks, graders, predictions and the rule are
+unchanged. The invalid run file is kept as evidence.

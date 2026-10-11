@@ -29,6 +29,9 @@ from skillbench.providers import Provider
 from skillbench.skill import discover, load_skill
 
 CONDITIONS = ("without", "with")
+# Bumped when the harness changes how answers are produced, so old run files are not resumed.
+# 2: answers are requested as plain text (run 1 had JSON output mode on by mistake).
+HARNESS_VERSION = 2
 
 BASE_SYSTEM = (
     "You are an experienced software engineer helping a colleague. Answer the request directly "
@@ -115,7 +118,7 @@ def system_prompt(condition: str, skill: str, bodies: dict[str, str]) -> str:
 
 def run_hash(tasks: list[Task], bodies: dict[str, str]) -> str:
     """Changes when a task, a grader-adjacent prompt, a skill body or the system prompts change."""
-    h = hashlib.sha256((BASE_SYSTEM + SKILL_SYSTEM).encode())
+    h = hashlib.sha256((BASE_SYSTEM + SKILL_SYSTEM + str(HARNESS_VERSION)).encode())
     for t in sorted(tasks, key=lambda t: t.id):
         h.update(t.id.encode() + t.source_hash.encode() + bodies.get(t.skill, "").encode())
     return h.hexdigest()[:8]
@@ -136,6 +139,7 @@ def run(tasks, bodies, provider, trials, out_dir, progress=None) -> tuple[Path, 
     missing = {t.skill for t in tasks} - set(bodies)
     if missing:
         raise ValueError(f"tasks reference skills that weren't found: {sorted(missing)}")
+    provider.json_mode = False  # answers are prose and code, never forced into JSON
     path = run_path(out_dir, provider, tasks, bodies)
     path.parent.mkdir(parents=True, exist_ok=True)
     answers = load_answers(path)
