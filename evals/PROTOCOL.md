@@ -51,3 +51,51 @@ So:
   hard-set accuracy up by at least 3 of 114 answers, no skill's hard-set recall down, and
   round-1 accuracy unchanged (156 of 156).
 - One description is edited at a time, so each change in the numbers can be attributed.
+
+---
+
+# Round 3: outcome evals
+
+Trigger evals ask whether the agent loads a skill. Outcome evals ask whether loading it makes
+the work better. Written and committed **before** any model answered these tasks.
+
+## Setup (fixed)
+
+- Tasks: `evals/outcomes/*/task.py`, 2 per skill (8 total). Each prompt is neutral: it never
+  asks for the behaviour the skill adds (the debugging tasks never mention tests, the review
+  tasks never list what to look for).
+- Conditions: the same model answers each task twice per trial, as a plain assistant
+  (`without`) and with the skill's SKILL.md body loaded as instructions (`with`). Bundled
+  scripts and references are not available in either condition.
+- Model: `gemini-3.5-flash-lite`, 3 trials, temperature 0. That is 48 answers.
+- Grading is deterministic and published with its own tests (`tests/test_outcome_graders.py`:
+  every grader passes a hand-written good answer and fails a bad one). The two debugging tasks
+  are graded by running the answer's code: its test must fail on the original bug, pass on its
+  fix, and the fix must pass hidden tests.
+
+## Predictions (written before the run)
+
+1. `repro-before-fix` shows the largest gain: without the skill, answers mostly fix the code
+   without a test that reproduces the bug; with it, they write that test first.
+2. `mcp-server-hardening`: without the skill, reviews catch the classic issues (shell injection,
+   path traversal) but miss MCP-specific ones (DNS rebinding, token passthrough).
+3. `release-polish`: without the skill, answers miss that a committed secret stays in git history.
+4. With-skill answers are longer.
+
+## Rule for "the skill helps"
+
+A skill is reported as helping only if, across its 2 tasks × 3 trials:
+
+1. tasks fully passed rise by at least 2 of 6 runs, and
+2. the mean check score does not drop on either task.
+
+Otherwise it is reported as "no measured benefit". No task or grader is changed after the run;
+if a grader turns out to be wrong, the fix and its effect on the numbers are reported separately.
+
+## Known limits
+
+- 6 of 8 tasks are graded by finding specific content in the answer. A with-skill answer can
+  echo the skill's vocabulary ("held-out set", "DNS rebinding"). Naming a problem is necessary
+  for a good review, not sufficient, so these scores are an upper bound on real improvement.
+  The two debugging tasks are graded by execution and don't have this weakness.
+- The skill text and the tasks were written by the same author.
