@@ -5,7 +5,7 @@ license: MIT
 compatibility: Needs Python 3.11+. The scoring script uses only the standard library.
 metadata:
   author: Enoch Nemili
-  version: "0.1.0"
+  version: "1.0.0"
   origin: Distilled from the PaperMind hybrid-search evaluation
 ---
 

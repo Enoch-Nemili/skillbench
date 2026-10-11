@@ -5,7 +5,7 @@ license: MIT
 compatibility: The check script needs Python 3.11+ and git. Release commands use the GitHub CLI (gh); other hosts work the same way by hand.
 metadata:
   author: Enoch Nemili
-  version: "0.1.0"
+  version: "1.0.0"
   origin: Distilled from preparing PaperMind and other repos for v1.0.0
 ---
 

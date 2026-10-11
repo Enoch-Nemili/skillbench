@@ -5,7 +5,7 @@ license: MIT
 compatibility: The flaky-run script needs Python 3.11+. The workflow applies to any language and test runner.
 metadata:
   author: Enoch Nemili
-  version: "0.1.0"
+  version: "1.0.0"
   origin: Distilled from bugs found and fixed in PaperMind and skillbench
 ---
 

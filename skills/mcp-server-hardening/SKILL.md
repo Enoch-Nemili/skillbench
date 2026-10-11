@@ -5,7 +5,7 @@ license: MIT
 compatibility: Probe script needs Python 3.11+ and network access to the server. Examples use the MCP Python SDK; the checklist applies to any SDK.
 metadata:
   author: Enoch Nemili
-  version: "0.1.0"
+  version: "1.0.0"
   origin: Distilled from hardening the PaperMind MCP server
 ---
 
