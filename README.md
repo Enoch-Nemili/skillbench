@@ -12,7 +12,7 @@ Each skill is distilled from a project that was built and measured first. `retri
 example, is the method used to tune [PaperMind](https://github.com/Enoch-Nemili/papermind)'s
 hybrid search.
 
-> **Status:** linter, 4 skills, trigger and outcome evals with results. v1.0.0 next.
+> **Status:** v1.0.0. Linter, 4 skills, trigger and outcome evals with results. See the [changelog](CHANGELOG.md).
 
 ## Skills
 
@@ -156,7 +156,7 @@ before and after numbers are [reported separately](evals/RESULTS.md#grader-fixes
 - [x] Outcome evals: the same tasks with and without the skill, scored by deterministic checks
 - [x] CI: tests, ruff and `skillbench lint --strict` on every push and pull request
 - [x] Results tables in this README
-- [ ] v1.0.0
+- [x] v1.0.0
 
 ## Development
 
@@ -167,6 +167,11 @@ pytest
 ruff check . && ruff format --check .
 skillbench lint --strict skills/
 ```
+
+## Contributing and security
+
+[CONTRIBUTING.md](CONTRIBUTING.md) covers setup and the rules for changing skills and evals.
+Outcome grading runs model-written code on your machine: read [SECURITY.md](SECURITY.md) first.
 
 ## License
 

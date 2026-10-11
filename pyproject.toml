@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "skillbench"
-version = "0.1.0"
+version = "1.0.0"
 description = "Agent Skills for AI-infra work, plus the harness that measures whether they help."
 readme = "README.md"
 license = "MIT"
