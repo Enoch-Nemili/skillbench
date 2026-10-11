@@ -41,6 +41,17 @@ def main(argv: list[str] | None = None) -> int:
     trig.add_argument("--min-accuracy", type=float, help="exit 1 if accuracy is below this (0-1)")
     trig.add_argument("--json", action="store_true", help="print metrics as JSON")
 
+    out = sub.add_parser("outcomes", help="measure whether a skill improves the work itself")
+    out.add_argument("paths", nargs="+", help="skill folders, or folders that contain skills")
+    out.add_argument("--tasks", default="evals/outcomes", help="folder of <task>/task.py")
+    out.add_argument("--provider", default="gemini", help="gemini or ollama")
+    out.add_argument("--model", help="model id, e.g. from `skillbench models`")
+    out.add_argument("--trials", type=int, default=3)
+    out.add_argument("--temperature", type=float, default=0.0)
+    out.add_argument("--rpm", type=float, help="max requests per minute (gemini default 5)")
+    out.add_argument("--out", default="evals/runs", help="folder for run files and reports")
+    out.add_argument("--json", action="store_true", help="print the summary as JSON")
+
     models = sub.add_parser("models", help="list the models a provider offers you")
     models.add_argument("--provider", default="gemini")
 
@@ -49,6 +60,8 @@ def main(argv: list[str] | None = None) -> int:
         return _lint(args.paths, args.format, args.strict)
     if args.command == "models":
         return _models(args.provider)
+    if args.command == "outcomes":
+        return _outcomes(args)
     return _triggers(args)
 
 
@@ -169,6 +182,55 @@ def _triggers(args: argparse.Namespace) -> int:
             f"accuracy {accuracy:.3f} is below --min-accuracy {args.min_accuracy}", file=sys.stderr
         )
         return 1
+    return 0
+
+
+def _outcomes(args: argparse.Namespace) -> int:
+    from skillbench import outcomes
+
+    try:
+        tasks = outcomes.load_tasks(args.tasks)
+        bodies = outcomes.skill_bodies(args.paths)
+        if args.provider == "keyword":
+            raise ProviderError("outcome evals need a model: use gemini or ollama")
+        provider = make_provider(args.provider, args.model, args.temperature, args.rpm)
+    except (OSError, ValueError, ProviderError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+    def progress(i, total, task, answer):
+        print(
+            f"[{i}/{total}] {task.id} ({answer.condition}): {len(answer.output)} chars, "
+            f"{answer.seconds}s",
+            file=sys.stderr,
+        )
+
+    path = outcomes.run_path(args.out, provider, tasks, bodies)
+    incomplete = None
+    try:
+        path, answers = outcomes.run(tasks, bodies, provider, args.trials, args.out, progress)
+    except ProviderError as exc:
+        incomplete = str(exc)
+        answers = outcomes.load_answers(path)
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+    results = outcomes.grade_all(tasks, answers, args.trials)
+    title = (
+        f"{provider.name} · {provider.model} · outcomes · {args.trials} trial(s) · {path.stem[-8:]}"
+    )
+    markdown = outcomes.to_markdown(results, title)
+    if answers:
+        path.with_suffix(".md").write_text(markdown, encoding="utf-8")
+    if args.json:
+        print(json.dumps({"run": str(path), **outcomes.summarize(results)}, indent=2))
+    else:
+        print(markdown)
+        print(f"answers: {path}\nreport:  {path.with_suffix('.md')}")
+    if incomplete:
+        print(f"\nstopped early: {incomplete}", file=sys.stderr)
+        return 3
     return 0
 
 
