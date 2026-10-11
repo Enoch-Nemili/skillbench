@@ -1,6 +1,9 @@
-# Trigger eval results
+# Eval results
 
 Method and rules: [PROTOCOL.md](PROTOCOL.md). Raw answers for every run: [runs/](runs/).
+
+- [Trigger evals](#summary): does the agent load the right skill?
+- [Outcome evals](#outcome-evals): does loading it make the work better?
 
 ## Summary
 
@@ -77,3 +80,76 @@ answer, which is within noise for sets this size, and that is why the rule asks 
 loss at all: a precision gain paid for with recall is reported, not shipped.
 
 Runs: `runs/*--967862e6.*` (edited catalog) against `runs/*--84aa81bb.*` (original).
+
+## Outcome evals
+
+`gemini-3.5-flash-lite`, temperature 0, 8 tasks (2 per skill) × with/without the skill × 3
+trials = 48 answers, graded deterministically. Run: `runs/*--outcomes--e1381083.*`. Numbers are
+after the two [grader fixes](#grader-fixes) below, which are reported separately.
+
+| Skill | Fully passed, without → with | Mean check score | Pre-registered rule | Verdict |
+|---|---:|---:|---|---|
+| `repro-before-fix` | 0/6 → **6/6** | 40% → 100% | met | **helps** |
+| `release-polish` | 1/6 → **5/6** | 51% → 96% | met | **helps** |
+| `mcp-server-hardening` | 2/6 → 4/6 | 82% → 93% | failed: container review score fell 93% → 87% | no measured benefit |
+| `retrieval-eval` | 0/6 → 0/6 | 37% → 63% | failed: no gain in full passes | no measured benefit |
+| All | 3/24 → 15/24 | 53% → 88% | | |
+
+**What the answers show:**
+
+- `repro-before-fix`: without the skill, the model fixed both bugs correctly every time (6/6
+  fixes pass the hidden tests) but never wrote a test. With it, all 6 answers wrote a test that
+  fails on the original code and passes on the fix. Both are checked by running the code, not
+  by reading it. The skill doesn't make the fix better; it adds the reproduction, which is its
+  whole job.
+- `release-polish`: the "ready to publish?" checklist went from 28% to 100%. Without the skill,
+  no answer said to rotate the key in the committed `.env`, add a license, or give the README
+  install and usage steps.
+- `mcp-server-hardening`: the server review went from 0/3 to 3/3 full passes. The container
+  review got slightly worse: with the skill, 2 of 3 answers missed that `COPY . .` copies the
+  whole build context into the image (no `.dockerignore`); without it, 1 of 3 missed the API key
+  baked in with `ENV`.
+  The rule allows no score drop on either task, so this skill is not counted as helping.
+- `retrieval-eval`: no full passes either way. With the skill, answers wrote JSONL queries in
+  the right shape and fixed a decision rule up front, but none mentioned a held-out set and 2
+  of 3 wrote fewer than 10 queries. On comparing two runs, the hard part was arithmetic: MRR
+  was computed correctly 0/3 times without the skill and 1/3 with it. The skill's bundled
+  scoring script would do that arithmetic, but scripts are not available in this setup.
+
+**Predictions, checked:**
+
+1. `repro-before-fix` shows the largest gain: **confirmed** (+6 full passes; next is
+   `release-polish` at +4).
+2. Without the hardening skill, reviews catch classic issues but miss MCP-specific ones:
+   **confirmed.** DNS rebinding and token passthrough were missed in 3/3 answers; the other 5
+   findings were caught every time.
+3. Without `release-polish`, answers miss that a committed secret stays in git history:
+   **mostly confirmed** (missed in 2 of 3).
+4. With-skill answers are longer: **mostly confirmed**, 7 of 8 tasks. On the cart bug they got
+   shorter (949 → 731 characters on average): a test and a fix, with less explanation.
+
+### Grader fixes
+
+Two graders were wrong and were fixed after the run ([amendment](PROTOCOL.md#amendment-two-grader-fixes-after-the-valid-run-reported-separately)).
+The same 48 saved answers, graded three ways:
+
+| | Original graders | Extraction fixed | Both fixed |
+|---|---:|---:|---:|
+| Fully passed, without → with | 12% → 38% | 12% → 62% | 12% → 62% |
+| Mean check score, without → with | 40% → 62% | 50% → 86% | 53% → 88% |
+| `repro-before-fix` full passes | 0/6 → 0/6 | 0/6 → 6/6 | 0/6 → 6/6 |
+| `repro-before-fix` verdict | no measured benefit | helps | helps |
+| Other verdicts | | unchanged | unchanged |
+
+The extraction fix changes one verdict, so it deserves the most scrutiny. It applies to both
+conditions, and without-skill answers gained too: their fixes are now found, run and pass the
+hidden tests. The checks it unlocks run the code: a test only counts if it fails on the bug and
+passes on the fix. Its limit: the new parser was tested on the layouts this model produced, and
+another model may need more. The metric fix moves no pass/fail result.
+
+### Known limits
+
+One model, 3 trials, 2 tasks per skill: a difference of one or two runs is within noise. Six of
+the eight tasks are graded by finding content in the answer, which a with-skill answer can echo
+from the skill's text, so those scores are an upper bound. The skills, tasks and graders were
+written by the same author.

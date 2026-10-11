@@ -113,3 +113,25 @@ Fix: outcome runs now request plain text (regression tests in `tests/test_provid
 `tests/test_outcomes.py`), and the harness version is part of the run file name, so the re-run
 starts fresh instead of resuming the broken file. Tasks, graders, predictions and the rule are
 unchanged. The invalid run file is kept as evidence.
+
+## Amendment: two grader fixes after the valid run (reported separately)
+
+Written after the valid run (`runs/gemini--gemini-3.5-flash-lite--outcomes--e1381083.*`) and
+after reading its answers, so these are post-hoc. Per the rule above, both are reported with
+their effect on the numbers ([RESULTS.md](RESULTS.md#grader-fixes)). No answer was regenerated:
+the saved answers were re-graded with `skillbench grade`, which makes no API calls.
+
+1. **File extraction.** The system prompt asks for each file in a fenced block whose first
+   line is `# file: name`. The model mostly put the header above the fence, or wrote no opening
+   fence at all (header, code, then a stray closing fence). The grader only read the requested
+   layout, so it found no code in any debugging answer and both debugging tasks scored 0 in
+   both conditions. That measured the parser, not the model. Fix: `extract_files` accepts all
+   three layouts, and `retrieval-build-eval` reads JSONL query lines anywhere in the answer,
+   not only inside fences. Tests use the layouts seen in the run.
+2. **`metrics_named`** (`retrieval-build-eval`) looked for the literal strings `hit@1`,
+   `recall@` and `mrr`, so an answer that named MRR and NDCG, or "hit rate", failed. It now
+   counts metric families (hit rate/hit@k, recall@k, precision@k, MRR, nDCG).
+
+What is not changed: the pass criteria. `query_file` still requires `query` and `expected`
+keys (the skill's format); without-skill answers wrote 4–5 queries in any format, so they would
+fail its "at least 10" either way.

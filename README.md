@@ -5,14 +5,14 @@
 **Agent Skills that come with evidence.**
 
 A small pack of [Agent Skills](https://agentskills.io) for AI-infrastructure work, plus the
-harness that checks them: a linter that enforces the open SKILL.md spec today, and trigger and
-outcome evals (does the agent pick the skill, and does the work get better with it?) on the way.
+harness that checks them: a linter for the open SKILL.md spec, trigger evals (does the agent
+pick the right skill?) and outcome evals (does the work get better with it?).
 
 Each skill is distilled from a project that was built and measured first. `retrieval-eval`, for
 example, is the method used to tune [PaperMind](https://github.com/Enoch-Nemili/papermind)'s
 hybrid search.
 
-> **Status:** v0.2 in progress: linter, 4 skills, trigger evals with LLM results. Description fixes next.
+> **Status:** linter, 4 skills, trigger and outcome evals with results. v1.0.0 next.
 
 ## Skills
 
@@ -113,6 +113,36 @@ which accounts for every hard-set false trigger. A first description fix removed
 cost one answer of recall on each of two skills, so the pre-registered rule rejected it
 ([experiment 1](evals/RESULTS.md#experiment-1-tell-retrieval-eval-when-not-to-load-rejected)).
 
+## Outcome evals
+
+Loading the right skill only matters if the answer gets better. Each skill has 2 tasks in
+[`evals/outcomes/`](evals/outcomes/), written so the prompt never asks for what the skill adds
+(the bug reports never mention tests). The same model answers each task with and without the
+skill's instructions, and deterministic graders score the answers. The two debugging tasks are
+graded by running the code: the answer's test must fail on the original bug and pass on its
+fix, and the fix must pass hidden tests.
+
+```bash
+skillbench outcomes skills/ --provider gemini --model MODEL_ID --trials 3
+skillbench grade evals/runs/RUN.jsonl      # re-grade saved answers, no API calls
+```
+
+**Results** for `gemini-3.5-flash-lite`, 3 trials ([full write-up](evals/RESULTS.md#outcome-evals)):
+
+| Skill | Fully passed, without → with | Mean check score | Verdict |
+|---|---:|---:|---|
+| `repro-before-fix` | 0/6 → **6/6** | 40% → 100% | **helps** |
+| `release-polish` | 1/6 → **5/6** | 51% → 96% | **helps** |
+| `mcp-server-hardening` | 2/6 → 4/6 | 82% → 93% | no measured benefit |
+| `retrieval-eval` | 0/6 → 0/6 | 37% → 63% | no measured benefit |
+
+Verdicts follow a [rule fixed before the run](evals/PROTOCOL.md#rule-for-the-skill-helps): at
+least 2 more full passes and no score drop on either task. Without `repro-before-fix` the model
+fixed both bugs every time but never wrote a test; with it, every answer wrote a test that
+fails on the bug. `mcp-server-hardening` fixed the server review (0/3 → 3/3) but scored slightly
+lower on the container review, so it doesn't count. Two graders were fixed after the run; the
+before and after numbers are [reported separately](evals/RESULTS.md#grader-fixes).
+
 ## Roadmap
 
 - [x] Linter for the SKILL.md spec, with reference-validator conformance tests
@@ -122,10 +152,11 @@ cost one answer of recall on each of two skills, so the pre-registered rule reje
 - [x] Skill 4: `release-polish`
 - [x] Trigger eval harness: 52 labeled requests, distractor skills, Gemini/Ollama/keyword routers, resumable runs
 - [x] Trigger results: round 1 (ceiling) and a pre-registered hard set
-- [ ] Description fixes measured against the hard set
-- [ ] Outcome evals: the same tasks with and without the skill, scored by deterministic checks
+- [x] Description fix measured against the hard set (experiment 1, rejected by the rule)
+- [x] Outcome evals: the same tasks with and without the skill, scored by deterministic checks
 - [x] CI: tests, ruff and `skillbench lint --strict` on every push and pull request
-- [ ] Results table in this README, v1.0.0
+- [x] Results tables in this README
+- [ ] v1.0.0
 
 ## Development
 

@@ -138,3 +138,22 @@ def test_outcome_runs_never_use_json_mode(setup):
     assert provider.json_mode is True
     outcomes.run(tasks, bodies, provider, 1, setup / "out")
     assert provider.json_mode is False
+
+
+def test_grade_regrades_a_saved_run_without_a_provider(setup, capsys):
+    """`skillbench grade` re-scores saved answers with the current graders: no model, no key."""
+    tasks = outcomes.load_tasks(setup / "tasks")
+    bodies = outcomes.skill_bodies([str(setup / "skills")])
+    path, _ = outcomes.run(tasks, bodies, EchoSkill(), 2, setup / "out")
+    path.with_suffix(".md").write_text("stale report")
+
+    assert main(["grade", str(path), "--tasks", str(setup / "tasks"), "--json"]) == 0
+    summary = json.loads(capsys.readouterr().out)
+    assert summary["overall"]["without"]["pass_rate"] == 0.0
+    assert summary["overall"]["with"]["pass_rate"] == 1.0
+    assert summary["overall"]["with"]["n"] == 2
+    assert "echo · m1 · outcomes · 2 trial(s)" in path.with_suffix(".md").read_text()
+
+
+def test_grade_needs_answers(setup, capsys):
+    assert main(["grade", str(setup / "missing.jsonl"), "--tasks", str(setup / "tasks")]) == 2
