@@ -22,6 +22,34 @@ def test_extract_files_reads_file_headers():
     assert extract_files(out) == {"a.py": "x = 1\n", "b.js": "y\n"}
 
 
+def test_extract_files_header_on_the_line_before_the_fence():
+    """Seen in the real run: the header sits above the fence, sometimes repeated inside it."""
+    out = "Repro:\n\n# file: test_p.py\n```python\nimport p\n```\n\n# file: p.py\n```python\n# file: p.py\nx = 2\n```"
+    assert extract_files(out) == {"test_p.py": "import p\n", "p.py": "x = 2\n"}
+
+
+def test_extract_files_unfenced_code():
+    """Seen in the real run: no opening fence, a stray closing one, prose after the code."""
+    out = (
+        "Here is the fix:\n\n# file: test_a.py\nfrom a import f\n\ndef test_f():\n    assert f() == 1\n\n"
+        "# file: a.py\ndef f():\n    return 1\n```\n\nThis now returns 1 for every input.\n"
+    )
+    assert extract_files(out) == {
+        "test_a.py": "from a import f\n\ndef test_f():\n    assert f() == 1\n",
+        "a.py": "def f():\n    return 1\n",
+    }
+
+
+def test_extract_files_drops_prose_after_unfenced_python():
+    out = "# file: a.py\ndef f():\n    return 1\n\nThat's it: f now returns 1.\n"
+    assert extract_files(out) == {"a.py": "def f():\n    return 1\n"}
+
+
+def test_extract_files_ignores_unlabelled_blocks_and_shell_output():
+    out = "```\n$ pytest\n1 failed\n```\nSome prose.\n```python\nprint('no header')\n```"
+    assert extract_files(out) == {}
+
+
 def test_numbers_and_percentages():
     assert has_number("MRR went from 0.814 to 0.80", 0.7996, 0.01)
     assert 0.85 in numbers("recall@5 fell to 85%")
@@ -110,6 +138,15 @@ def paginate(items, page, size):
     start = (page - 1) * size
     return items[start:start + size]
 ```"""
+
+
+def test_cart_unfenced_answer_is_graded_by_running_it():
+    """The layout gemini-3.5-flash-lite actually produced: headers, no opening fences."""
+    unfenced = "\n\n".join(
+        block.replace("```python\n", "").replace("\n```", "") for block in (CART_TEST, CART_FIX)
+    )
+    assert "```" not in unfenced
+    assert failed("repro-cart-discount", unfenced) == set()
 
 
 def test_pagination_good_and_bad():
@@ -210,6 +247,15 @@ def test_build_eval_good_and_generic_advice():
         "rule_fixed_in_advance",
         "held_out_set",
     }
+
+
+def test_build_eval_reads_unfenced_jsonl_and_metric_families():
+    unfenced = BUILD_GOOD.replace("```jsonl", "# file: eval/queries.jsonl").replace("```", "")
+    assert failed("retrieval-build-eval", unfenced) == set()
+    spelled_out = BUILD_GOOD.lower().replace("hit@1", "hit rate").replace("recall@5", "ndcg@5")
+    assert "metrics_named" not in failed("retrieval-build-eval", spelled_out)
+    one_metric = "Track the MRR of each query weekly."
+    assert "metrics_named" in failed("retrieval-build-eval", one_metric)
 
 
 # --- release-polish ------------------------------------------------------------------------

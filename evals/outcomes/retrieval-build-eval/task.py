@@ -5,7 +5,7 @@ in advance, and a held-out set."""
 import json
 import re
 
-from skillbench.grading import Check, check_mentions, code_blocks
+from skillbench.grading import Check, check_mentions
 
 SKILL = "retrieval-eval"
 
@@ -15,22 +15,31 @@ look like "Reset your password", "Error E1042: payment declined", "Configure SSO
 "Export invoices as CSV". Help me set up a way to measure how good the search actually is.
 """
 
+# Ranking-metric families, however they're spelled (Hit@1, hit rate, hits_at_5, ...).
+_METRICS = {
+    "hit rate": r"\bhits?\s*(?:@|rate\b|_at_|at\s*\d)",
+    "recall@k": r"\brecall\s*(?:@|_at_|at\s*\d)",
+    "precision@k": r"\bprecision\s*(?:@|_at_|at\s*\d)",
+    "mrr": r"\bmrr\b|mean reciprocal rank",
+    "ndcg": r"\bndcg\b|ndcg@",
+}
+
 _EXACT = re.compile(r"\b[A-Z]{1,4}\d{2,}\b|\bSSO\b|\bOkta\b|\bCSV\b|\bSAML\b|\bAPI\b|\b2FA\b")
 
 
 def _queries(output: str) -> list[dict]:
+    """JSONL rows anywhere in the answer: models don't reliably fence their files."""
     rows = []
-    for block in code_blocks(output):
-        for line in block.splitlines():
-            line = line.strip()
-            if not line.startswith("{"):
-                continue
-            try:
-                row = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            if isinstance(row, dict) and "query" in row and "expected" in row:
-                rows.append(row)
+    for line in output.splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(row, dict) and "query" in row and "expected" in row:
+            rows.append(row)
     return rows
 
 
@@ -38,7 +47,7 @@ def grade(output: str):
     rows = _queries(output)
     exact = [r for r in rows if _EXACT.search(str(r["query"]))]
     plain = len(rows) - len(exact)
-    metrics = {m for m in ("hit@1", "recall@", "mrr") if m in output.lower()}
+    metrics = {name for name, pattern in _METRICS.items() if re.search(pattern, output, re.I)}
     return [
         Check("query_file", len(rows) >= 10, f"{len(rows)} JSONL queries with query/expected"),
         Check(

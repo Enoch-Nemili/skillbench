@@ -1,4 +1,4 @@
-"""Command line entry point: `skillbench lint`, `skillbench triggers`, `skillbench models`."""
+"""Command line entry point: `skillbench lint | triggers | outcomes | grade | models`."""
 
 from __future__ import annotations
 
@@ -52,6 +52,14 @@ def main(argv: list[str] | None = None) -> int:
     out.add_argument("--out", default="evals/runs", help="folder for run files and reports")
     out.add_argument("--json", action="store_true", help="print the summary as JSON")
 
+    grade = sub.add_parser(
+        "grade", help="re-grade a saved outcome run with the current graders (no API calls)"
+    )
+    grade.add_argument("run", help="an outcomes run file (.jsonl) from `skillbench outcomes`")
+    grade.add_argument("--tasks", default="evals/outcomes", help="folder of <task>/task.py")
+    grade.add_argument("--trials", type=int, help="grade only the first N trials (default: all)")
+    grade.add_argument("--json", action="store_true", help="print the summary as JSON")
+
     models = sub.add_parser("models", help="list the models a provider offers you")
     models.add_argument("--provider", default="gemini")
 
@@ -62,6 +70,8 @@ def main(argv: list[str] | None = None) -> int:
         return _models(args.provider)
     if args.command == "outcomes":
         return _outcomes(args)
+    if args.command == "grade":
+        return _grade(args)
     return _triggers(args)
 
 
@@ -233,6 +243,39 @@ def _outcomes(args: argparse.Namespace) -> int:
     if incomplete:
         print(f"\nstopped early: {incomplete}", file=sys.stderr)
         return 3
+    return 0
+
+
+def _grade(args: argparse.Namespace) -> int:
+    from pathlib import Path
+
+    from skillbench import outcomes
+
+    path = Path(args.run)
+    try:
+        tasks = outcomes.load_tasks(args.tasks)
+    except (OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    answers = outcomes.load_answers(path)
+    if not answers:
+        print(f"error: no answers in {path}", file=sys.stderr)
+        return 2
+    unknown = sorted({a.task for a in answers} - {t.id for t in tasks})
+    if unknown:
+        print(f"warning: no task.py for {', '.join(unknown)}; skipped", file=sys.stderr)
+    trials = args.trials or max(a.trial for a in answers) + 1
+    results = outcomes.grade_all(tasks, answers, trials)
+    # "gemini--model--outcomes--hash" -> "gemini · model · outcomes · ..."
+    provider, model, *_ = path.stem.split("--") + ["", ""]
+    title = f"{provider} · {model} · outcomes · {trials} trial(s) · {path.stem[-8:]}"
+    markdown = outcomes.to_markdown(results, title)
+    path.with_suffix(".md").write_text(markdown, encoding="utf-8")
+    if args.json:
+        print(json.dumps({"run": str(path), **outcomes.summarize(results)}, indent=2))
+    else:
+        print(markdown)
+        print(f"report: {path.with_suffix('.md')}")
     return 0
 
 

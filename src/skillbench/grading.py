@@ -25,14 +25,79 @@ def code_blocks(output: str) -> list[str]:
     return _BLOCK.findall(output)
 
 
+_FENCE = re.compile(r"^\s*```")
+_BARE_FENCE = re.compile(r"^\s*```\s*$")
+
+
+def _header(line: str) -> str | None:
+    match = _FILE_HEADER.match(line)
+    return Path(match.group(1)).name if match else None
+
+
+def _trim_prose(name: str, lines: list[str]) -> list[str]:
+    """An unfenced file runs until the next header or fence, so prose after it can tag along.
+    For Python, keep the longest prefix ending at a blank line that compiles."""
+    while lines and not lines[-1].strip():
+        lines = lines[:-1]
+    if not name.endswith(".py"):
+        return lines
+    cuts = [len(lines)] + [i for i in range(len(lines) - 1, 0, -1) if not lines[i].strip()]
+    for cut in cuts:
+        try:
+            compile("\n".join(lines[:cut]), name, "exec")
+            return lines[:cut]
+        except (SyntaxError, ValueError):
+            continue
+    return lines  # nothing compiles: keep it all and let the tests fail on the real code
+
+
 def extract_files(output: str) -> dict[str, str]:
-    """Files from fenced blocks whose first line is `# file: name`. Later blocks win."""
-    files = {}
-    for block in code_blocks(output):
-        first, _, rest = block.partition("\n")
-        match = _FILE_HEADER.match(first)
-        if match:
-            files[Path(match.group(1)).name] = rest
+    """Files the answer writes, named by a `# file: name` (or `// file: name`) header line.
+
+    Accepted layouts (models were asked for the first one but produce all three):
+      1. a fenced block whose first line is the header;
+      2. the header on its own line, then a fenced block;
+      3. the header, then unfenced code up to the next header or fence.
+    Fenced blocks without a header are ignored. Later files with the same name win.
+    """
+    lines = output.splitlines()
+    files: dict[str, str] = {}
+    pending: str | None = None  # a header seen just before a fence
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        if _FENCE.match(line):
+            end = next((j for j in range(i + 1, len(lines)) if _FENCE.match(lines[j])), len(lines))
+            body = lines[i + 1 : end]
+            name = _header(body[0]) if body else None
+            if name:
+                body = body[1:]
+            name = name or pending
+            if name:
+                files[name] = "\n".join(body) + "\n"
+            pending = None
+            i = end + 1
+            continue
+        name = _header(line)
+        if name:
+            nxt = next((j for j in range(i + 1, len(lines)) if lines[j].strip()), len(lines))
+            if nxt < len(lines) and _FENCE.match(lines[nxt]):
+                pending = name  # layout 2
+                i = nxt
+                continue
+            stops = (
+                j for j in range(i + 1, len(lines)) if _header(lines[j]) or _FENCE.match(lines[j])
+            )
+            end = next(stops, len(lines))
+            body = _trim_prose(name, lines[i + 1 : end])
+            if body:
+                files[name] = "\n".join(body) + "\n"
+            # A bare ``` right after unfenced code is a stray closing fence, not a new block.
+            i = end + 1 if end < len(lines) and _BARE_FENCE.match(lines[end]) else end
+            continue
+        if line.strip():
+            pending = None
+        i += 1
     return files
 
 
