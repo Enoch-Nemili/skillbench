@@ -226,3 +226,33 @@ def test_latency_excludes_rate_limit_waiting(monkeypatch):
     provider.complete("s", "first")
     provider.complete("s", "second")  # waits ~10 s for the limiter, then 2 s of model time
     assert provider.last_seconds == 2.0
+
+
+def test_gemini_plain_text_mode_has_no_json_mime_type(monkeypatch, gemini_env):
+    """Regression: outcome answers came back as JSON objects because JSON mode was always on."""
+    routes = {("POST", "/models/m1:generateContent"): lambda b, h: reply("plain answer")}
+    with fake_server(routes) as (url, seen):
+        monkeypatch.setattr(providers, "GEMINI_URL", url)
+        provider = GeminiProvider("m1", rpm=None)
+        provider.json_mode = False
+        provider.complete("s", "u")
+        provider.json_mode = True
+        provider.complete("s", "u")
+    assert "responseMimeType" not in seen[0][2]["generationConfig"]
+    assert seen[1][2]["generationConfig"]["responseMimeType"] == "application/json"
+
+
+def test_ollama_plain_text_mode(monkeypatch):
+    routes = {("POST", "/api/chat"): lambda b, h: (200, {"message": {"content": "hi"}}, {})}
+    with fake_server(routes) as (url, seen):
+        monkeypatch.setattr(providers, "OLLAMA_URL", url)
+        provider = OllamaProvider("x")
+        provider.json_mode = False
+        provider.complete("s", "u")
+    assert "format" not in seen[0][2]
+
+
+def test_make_provider_sets_json_mode(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+    assert providers.make_provider("gemini", "m").json_mode is True
+    assert providers.make_provider("gemini", "m", json_mode=False).json_mode is False

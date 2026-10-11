@@ -193,7 +193,9 @@ def _outcomes(args: argparse.Namespace) -> int:
         bodies = outcomes.skill_bodies(args.paths)
         if args.provider == "keyword":
             raise ProviderError("outcome evals need a model: use gemini or ollama")
-        provider = make_provider(args.provider, args.model, args.temperature, args.rpm)
+        provider = make_provider(
+            args.provider, args.model, args.temperature, args.rpm, json_mode=False
+        )
     except (OSError, ValueError, ProviderError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

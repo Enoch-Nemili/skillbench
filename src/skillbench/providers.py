@@ -77,6 +77,9 @@ class Provider:
         self.min_interval = 60.0 / rpm if rpm else 0.0
         self._last_call = 0.0
         self.last_seconds = 0.0
+        # Ask the model for a JSON reply. Trigger evals want this; outcome evals must not have it,
+        # since their answers are prose and code blocks.
+        self.json_mode = True
 
     def complete(self, system: str, user: str) -> str:
         wait = self.min_interval - (time.monotonic() - self._last_call)
@@ -120,11 +123,10 @@ class GeminiProvider(Provider):
         body = {
             "systemInstruction": {"parts": [{"text": system}]},
             "contents": [{"role": "user", "parts": [{"text": user}]}],
-            "generationConfig": {
-                "temperature": self.temperature,
-                "responseMimeType": "application/json",
-            },
+            "generationConfig": {"temperature": self.temperature},
         }
+        if self.json_mode:
+            body["generationConfig"]["responseMimeType"] = "application/json"
         url = f"{GEMINI_URL}/models/{self.model}:generateContent"
         for attempt in range(self.MAX_RETRIES + 1):
             try:
@@ -180,9 +182,10 @@ class OllamaProvider(Provider):
             "model": self.model,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
             "stream": False,
-            "format": "json",
             "options": {"temperature": self.temperature},
         }
+        if self.json_mode:
+            body["format"] = "json"
         try:
             data = _post_json(f"{OLLAMA_URL}/api/chat", body, {}, self.timeout)
         except urllib.error.HTTPError as err:
@@ -252,7 +255,11 @@ PROVIDERS = {"gemini": GeminiProvider, "ollama": OllamaProvider, "keyword": Keyw
 
 
 def make_provider(
-    name: str, model: str | None, temperature: float = 0.0, rpm: float | None = None
+    name: str,
+    model: str | None,
+    temperature: float = 0.0,
+    rpm: float | None = None,
+    json_mode: bool = True,
 ) -> Provider:
     if name not in PROVIDERS:
         raise ProviderError(f"unknown provider {name!r}; choose from {', '.join(PROVIDERS)}")
@@ -261,4 +268,6 @@ def make_provider(
     kwargs = {"temperature": temperature}
     if rpm is not None:
         kwargs["rpm"] = rpm
-    return PROVIDERS[name](model or "overlap", **kwargs)
+    provider = PROVIDERS[name](model or "overlap", **kwargs)
+    provider.json_mode = json_mode
+    return provider
