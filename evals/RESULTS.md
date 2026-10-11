@@ -8,7 +8,7 @@ Method and rules: [PROTOCOL.md](PROTOCOL.md). Raw answers for every run: [runs/]
 |---|---:|---:|---:|---:|
 | Keyword overlap (offline baseline) | 73% | 37% | 46% | – |
 | `gemini-3.5-flash-lite` | **100%** (156/156) | **93%** (106/114) | 13% | 0.6 s |
-| `gemini-3.8-flash` | incomplete (12 answers, all correct) | not run | – | ~77 s |
+| `gemini-3.8-flash` | incomplete (35 answers, all correct) | not run | – | 20 s (up to 77 s) |
 
 Keyword baseline numbers are 1 trial (it is deterministic). Flash-lite's round-1 latency is not
 reported: it was measured before a fix and included rate-limit waiting.
@@ -52,4 +52,28 @@ right skill. A ceiling: the set can't show whether a description edit helps, whi
 
 ## Description experiments
 
-Pending: see PROTOCOL.md for the rule.
+Each experiment edits one description, re-runs `gemini-3.5-flash-lite` on both sets (3 trials),
+and applies the rule fixed in PROTOCOL.md before the run. Rejected edits are reverted and
+still reported.
+
+### Experiment 1: tell `retrieval-eval` when not to load (rejected)
+
+Added to the end of the description: *"Not for explaining what a metric means or writing a single
+metric function on its own."*
+
+| | Before | After | Rule | |
+|---|---:|---:|---|---|
+| Hard-set accuracy | 106/114 | 109/114 | at least 109 | met |
+| Hard-set false triggers | 5/39 | **0/39** | (not a condition) | |
+| `retrieval-eval` hard-set recall | 21/21 | 20/21 | must not drop | **failed** |
+| `repro-before-fix` hard-set recall | 24/27 | 23/27 | must not drop | **failed** |
+| Round-1 accuracy | 156/156 | 155/156 | unchanged | **failed** |
+
+**Verdict: reverted.** The edit removed every false trigger it targeted (conceptual questions went
+from 13/18 to 18/18), but recall slipped: "top-1 accuracy of our doc search: how do I even measure
+that" no longer loaded the skill once in three tries, and one round-1 answer loaded
+`repro-before-fix` for "Write unit tests for the new pagination helper". Each change is a single
+answer, which is within noise for sets this size, and that is why the rule asks for no recall
+loss at all: a precision gain paid for with recall is reported, not shipped.
+
+Runs: `runs/*--967862e6.*` (edited catalog) against `runs/*--84aa81bb.*` (original).

@@ -109,7 +109,9 @@ Round 1 hit a ceiling, so a [pre-registered](evals/PROTOCOL.md) hard set followe
 confusable, terse, non-English and long requests, plus cases where a distractor is the right
 answer. Two of its three predictions were wrong. The real weak spot: `retrieval-eval` loads
 for conceptual questions about metrics ("What's the difference between hit@1 and recall@5?"),
-which accounts for every hard-set false trigger. Fixing its description is the next experiment.
+which accounts for every hard-set false trigger. A first description fix removed all of them but
+cost one answer of recall on each of two skills, so the pre-registered rule rejected it
+([experiment 1](evals/RESULTS.md#experiment-1-tell-retrieval-eval-when-not-to-load-rejected)).
 
 ## Roadmap
 
