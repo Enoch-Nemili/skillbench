@@ -1,3 +1,5 @@
+![skillbench](docs/social-preview.png)
+
 # skillbench
 
 [![CI](https://github.com/Enoch-Nemili/skillbench/actions/workflows/ci.yml/badge.svg)](https://github.com/Enoch-Nemili/skillbench/actions/workflows/ci.yml)
